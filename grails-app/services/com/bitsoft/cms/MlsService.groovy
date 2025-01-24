@@ -3,12 +3,12 @@ package com.bitsoft.cms
 import grails.gorm.transactions.Transactional
 import groovy.json.JsonSlurper
 
-@Transactional
+
 class MlsService {
 
     String mlsGridAPIKey = "38e0a05020fd4fdf29430a851686d691dca9f957"
-    String mlsGridAPIURL = "https://api.mlsgrid.com/v2/Property?\$filter=StandardStatus eq 'Active' or StandardStatus eq 'ComingSoon'"
-    int fetchTop = 500
+    String mlsGridAPIURL = "https://api.mlsgrid.com/v2/Property?%24filter=StandardStatus%20eq%20%27Active%27%20or%20StandardStatus%20eq%20%27ComingSoon%27"
+    int fetchTop = 5
     List<String> validStatuses = ['Active', 'ComingSoon']
     List<String> validPropertyTypes = ['Commercial Sale', 'Farm', 'Land', 'Residential', 'ResidentialIncome']
     List<String> invalidListings = []
@@ -16,12 +16,35 @@ class MlsService {
 
     void fetchMLSData(String url = mlsGridAPIURL, int retryCount = 0) {
         try {
-            // Perform API request
-            def response = new URL(url).openConnection()
-            response.setRequestProperty("Authorization", "Bearer $mlsGridAPIKey")
-            def responseText = response.inputStream.text
-            def jsonResponse = new JsonSlurper().parseText(responseText)
+            // Open connection
+            def connection = new URL(url).openConnection()
+            connection.setRequestProperty("Authorization", "Bearer $mlsGridAPIKey")
+            connection.setRequestProperty("Content-Type", "application/json")
+            connection.setRequestProperty("Accept", "application/json")
+            connection.setRequestProperty("Accept-Encoding", "gzip") // Add gzip compression
 
+            connection.doOutput = false // Ensures this is a GET request
+
+            println "Request URL: $url"
+            println "Headers: Authorization: Bearer $mlsGridAPIKey"
+
+            // Get response
+            def responseCode = connection.responseCode
+            println "Response Code: $responseCode"
+
+            if (responseCode != 200) {
+                def errorMessage = connection.errorStream?.text ?: "No error message"
+                println "Error Response: $errorMessage"
+                throw new IllegalArgumentException("Unexpected response code: $responseCode")
+            }
+
+            // Read and decompress the response (if gzip is used)
+            def inputStream = connection.inputStream
+            if ("gzip".equalsIgnoreCase(connection.getContentEncoding())) {
+                inputStream = new java.util.zip.GZIPInputStream(inputStream)
+            }
+            def responseText = inputStream.text
+            def jsonResponse = new JsonSlurper().parseText(responseText)
             if (!jsonResponse?.value || !(jsonResponse.value instanceof List)) {
                 throw new IllegalArgumentException("MLS Data is not in the expected format")
             }
@@ -31,9 +54,14 @@ class MlsService {
                 validStatuses.contains(listing.StandardStatus) &&
                         validPropertyTypes.contains(listing.PropertyType) &&
                         listing.StateOrProvince == 'MN'
-            }.collect { listing ->
-                mapListing(listing)
             }
+
+            if(jsonResponse.value && listings && jsonResponse.value.size() != listings.size()){
+                def toBeRemoved = jsonResponse.value - listings
+                println "toBeRemoved: $toBeRemoved.ListingId"
+                deleteInvalidListings(toBeRemoved.ListingId)
+            }
+
 
             processListings(listings)
 
@@ -44,6 +72,7 @@ class MlsService {
                 log.info "Data import completed successfully"
                 deleteInvalidListings(invalidListings)
             }
+
         } catch (Exception e) {
             if (retryCount < 3) {
                 int waitTime = (Math.pow(2, retryCount) * 1000).toInteger()
@@ -51,6 +80,7 @@ class MlsService {
                 sleep(waitTime)
                 fetchMLSData(url, retryCount + 1)
             } else {
+                log.error "Failed after 3 retries: ${e.message}"
                 throw e
             }
         }
@@ -91,21 +121,74 @@ class MlsService {
         }
     }
 
+    @Transactional
     private void saveOrUpdateListing(Map listingData) {
+        // Map JSON keys to domain class properties
+        def mappedData = [
+                listingKey              : listingData.ListingKey,
+                media                   : listingData.Media,
+                streetAddress           : listingData.StreetAddress,
+                streetNumber            : listingData.StreetNumber,
+                streetDirPrefix         : listingData.StreetDirPrefix ?: '',
+                streetName              : listingData.StreetName,
+                streetSuffix            : listingData.StreetSuffix ?: '',
+                unitNumber              : listingData.UnitNumber ?: '',
+                postalCity              : listingData.PostalCity,
+                stateOrProvince         : listingData.StateOrProvince,
+                postalCode              : listingData.PostalCode,
+                publicRemarks           : listingData.PublicRemarks,
+                listOfficeName          : listingData.ListOfficeName,
+                bedroomsTotal           : listingData.BedroomsTotal as Integer,
+                bathroomsTotal          : listingData.BathroomsTotalInteger as Integer,
+                sqFtTotal               : listingData.SqFtTotal as Integer,
+                nstSqFtTotal            : listingData.NST_SqFtTotal as Integer, // New field
+                garageSpaces            : listingData.GarageSpaces as Integer,
+                waterfrontFeet          : listingData.WaterfrontFeet as Integer,
+                url                     : listingData.Url,
+                latitude                : listingData.Latitude as Double,
+                longitude               : listingData.Longitude as Double,
+                listPrice               : listingData.ListPrice as Double,
+                lotSizeArea             : listingData.LotSizeArea as Double,
+                associationFee          : listingData.AssociationFee as Integer,
+                daysOnMarket            : listingData.DaysOnMarket ?: 9999, // Default value if null
+                daysOnMarketCumulative  : listingData.CumulativeDaysOnMarket ?: 9999, // Default value if null
+                listDate                : listingData.ListDate,
+                originalEntryTimestamp  : listingData.OriginalEntryTimestamp,
+                inputDate               : listingData.NST_LastUpdateDate,
+                listingContractDate     : listingData.ListingContractDate,
+                sqFtFinishedBuilding    : listingData.SqFtFinishedBuilding as Integer,
+                buildingAreaTotal       : listingData.BuildingAreaTotal as Integer,
+                parkingGarage           : listingData.ParkingGarage as Boolean
+        ]
+
+
+        // Check if a listing with the same key exists
         def existingListing = Listing.findByListingKey(listingData.ListingKey)
         if (existingListing) {
-            existingListing.properties = listingData
-            existingListing.save(flush: true, failOnError: true)
-            log.info "Listing ${listingData.ListingKey} updated successfully"
+            existingListing.properties = mappedData
+            if (existingListing.save()) {
+                log.info "Listing ${listingData.ListingKey} updated successfully"
+            } else {
+                log.error "Failed to update listing ${listingData.ListingKey}: ${existingListing.errors.allErrors}"
+            }
         } else {
-            new Listing(listingData).save(flush: true, failOnError: true)
-            log.info "Listing ${listingData.ListingKey} created successfully"
+            def newListing = new Listing(mappedData)
+            if (newListing.save()) {
+                log.info "Listing ${listingData.ListingKey} created successfully"
+            } else {
+                log.error "Failed to create listing ${listingData.ListingKey}: ${newListing.errors.allErrors}"
+            }
         }
     }
 
+    @Transactional
     private void deleteInvalidListings(List<String> listingKeys) {
-        Listing.where { listingKey in listingKeys }.deleteAll()
-        log.info "Deleted invalid listings: ${listingKeys}"
+        try {
+            Listing.where { listingKey in listingKeys }.deleteAll()
+            log.info "Deleted invalid listings: ${listingKeys}"
+        } catch (Exception e) {
+            log.error("Deleted invalid listings: ${e.message}")
+        }
     }
 
     private String generateURL(Map listing) {

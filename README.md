@@ -27,3 +27,5 @@ This README would normally document whatever steps are necessary to get your app
 
 * Repo owner or admin
 * Other community or team contact
+
+GET /listing?max=10&offset=0&sort=latitude&order=asc&Latitude_gte=39.0&Latitude_lte=40.0&Longitude_gte=-90.0&Longitude_lte=-89.0
