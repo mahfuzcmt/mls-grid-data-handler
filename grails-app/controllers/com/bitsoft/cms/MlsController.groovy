@@ -7,13 +7,13 @@ class MlsController {
 
     MlsService mlsService
 
-    def index() {
+    def list() {
         // Retrieve pagination parameters
         int max = params.int('max') ?: 10 // Default to 20 items per page
         int offset = params.int('offset') ?: 0 // Default to starting at the beginning
 
         // Retrieve sorting parameters
-        String sort = params.sort ?: 'createdAt' // Default to 'createdAt'
+        String sort = params.sort ?: 'created' // Default to 'createdAt'
         String order = params.order ?: 'desc' // Default to descending order
 
         // Retrieve filtering parameters

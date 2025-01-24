@@ -64,6 +64,9 @@ class MlsService {
 
 
             processListings(listings)
+            Config config = Config.last() ?: new Config()
+            config.lastTimeStamp = System.currentTimeMillis()
+            config.save()
 
             // Handle next link
             if (jsonResponse['@odata.nextLink']) {
