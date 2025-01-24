@@ -13,8 +13,8 @@ class MlsController {
         int offset = params.int('offset') ?: 0 // Default to starting at the beginning
 
         // Retrieve sorting parameters
-        String sort = params.sort ?: 'created' // Default to 'createdAt'
-        String order = params.order ?: 'desc' // Default to descending order
+        String sort = params.sort
+        String order = params.order
 
         // Retrieve filtering parameters
         Double latitudeGte = params.double('Latitude_gte')
@@ -41,9 +41,11 @@ class MlsController {
             }
 
             // Apply sorting
-            if (sort && order) {
+            /*if (sort && order) {
                 order(sort, order)
-            }
+            } else {
+                order("id", "desc")
+            }*/
         }
 
         // Total count of listings after applying filters

@@ -84,6 +84,7 @@ class Listing {
 
     static mapping = {
         media type: 'text'
+        publicRemarks type: 'text'
     }
 
     def beforeInsert (){

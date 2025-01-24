@@ -25,9 +25,6 @@ class MlsService {
 
             connection.doOutput = false // Ensures this is a GET request
 
-            println "Request URL: $url"
-            println "Headers: Authorization: Bearer $mlsGridAPIKey"
-
             // Get response
             def responseCode = connection.responseCode
             println "Response Code: $responseCode"
@@ -166,16 +163,19 @@ class MlsService {
 
 
         // Check if a listing with the same key exists
-        def existingListing = Listing.findByListingKey(listingData.ListingKey)
+        Listing existingListing = Listing.findByListingKey(listingData.ListingKey)
         if (existingListing) {
             existingListing.properties = mappedData
+            existingListing.updated = new Date()
             if (existingListing.save()) {
                 log.info "Listing ${listingData.ListingKey} updated successfully"
             } else {
                 log.error "Failed to update listing ${listingData.ListingKey}: ${existingListing.errors.allErrors}"
             }
         } else {
-            def newListing = new Listing(mappedData)
+            Listing newListing = new Listing(mappedData)
+            newListing.created = new Date()
+            newListing.updated = new Date()
             if (newListing.save()) {
                 log.info "Listing ${listingData.ListingKey} created successfully"
             } else {
