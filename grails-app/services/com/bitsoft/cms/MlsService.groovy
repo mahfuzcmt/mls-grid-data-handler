@@ -61,8 +61,14 @@ class MlsService {
 
 
             processListings(listings)
-            Config config = Config.last() ?: new Config()
+            Config config = Config.last()
+            if (!config) {
+                config = new Config()
+                config.created = new Date()
+            }
             config.lastTimeStamp = System.currentTimeMillis()
+            config.lastImport = new Date()
+            config.updated = new Date()
             config.save()
 
             // Handle next link
