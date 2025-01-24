@@ -1,0 +1,61 @@
+
+body { font-family: Roboto, sans-serif; background-color: rgb(250, 250, 250); }
+a { color: rgb(183, 26, 76); }
+.fromTo { }
+.front-indicator { margin: auto auto 15px; background-color: rgb(246, 246, 246); color: rgb(173, 173, 173); text-align: center; padding: 3px; border-radius: 5px; }
+.wrapper { width: 100%; background-color: rgb(255, 255, 255) !important; }
+.seat-container {/* margin: 0px auto; */text-align: left;}
+div.seatCharts-row { height: 35px; display: flex; justify-content: center; align-items: center; }
+.booking-details {float: left;text-align: left;font-size: 12px;height: 100%;position: relative;overflow-x: hidden;overflow-y: auto;border-left: 1px dotted #2196f34f;margin-top: 0;}
+.booking-details h2 { margin: 5px 0px 20px; font-size: 17px; font-weight: bold; }
+.booking-details h3 { margin: 5px 5px 0px 0px; font-size: 14px; }
+div.seatCharts-cell { color: rgb(24, 44, 78); height: 30px; width: 40px; line-height: 30px; }
+div.seatCharts-seat {color: #ffffff;cursor: pointer;box-shadow: -2px -1px 3px 1px #ffffffa8;}
+div.seatCharts-seat.available {background-color: #344767;}
+.vip-seat, div.seatCharts-seat.vip-seat, div.seatCharts-seat.seatCharts-cell.available.vip, div.seatCharts-seat.seatCharts-cell.available.vip-seat { background-color: rgb(119, 88, 136) !important; }
+.available-resale, div.seatCharts-seat.available-resale, div.seatCharts-seat.seatCharts-cell.available.resale, div.seatCharts-seat.seatCharts-cell.available.available-resale { background-color: rgb(118, 87, 9); }
+div.seatCharts-seat.available.first-class { background-color: rgb(58, 120, 195); }
+div.seatCharts-seat.focused {background-color: #607d8b;}
+div.seatCharts-seat.selected {background-color: #ff9800;}
+div.seatCharts-seat.booked { background-color: rgb(50, 205, 50); cursor: not-allowed; }
+div.seatCharts-seat.counter-book.seller-book.booked { background-color: rgb(144, 232, 144); cursor: not-allowed; }
+div.seatCharts-seat.counter-book.booked { background-color: rgb(24, 103, 24); cursor: not-allowed; }
+.female-booked, div.seatCharts-seat.female-booked {background-color: #FC0FC0 !important;}
+div.seatCharts-seat.counter-book.female-booked { background-color: rgb(4, 86, 134) !important; }
+div.seatCharts-seat.counter-book.seller-book.female-booked { background-color: rgb(139, 207, 247) !important; }
+div.seatCharts-seat.sold { background-color: red; }
+div.seatCharts-seat.unavailable { background-color: red; }
+div.seatCharts-seat.unavailable.counter-sell.seller-sell { background-color: rgb(251, 127, 127); }
+div.seatCharts-seat.unavailable.counter-sell { background-color: rgb(185, 4, 4); }
+.female-sold, div.seatCharts-seat.female-sold { background-color: rgb(252, 15, 192) !important; }
+div.seatCharts-seat.female-sold.counter-sell { background-color: rgb(160, 6, 121) !important; }
+div.seatCharts-seat.female-sold.counter-sell.seller-sell { background-color: rgb(243, 131, 214) !important; }
+.disabled-seat, div.seatCharts-seat.disabled-seat, div.seatCharts-seat.seatCharts-cell.disabled-seat { cursor: not-allowed; pointer-events: none; background-color: rgb(243, 243, 243) !important; }
+.holding, div.seatCharts-seat.holding.unavailable {
+    pointer-events: none; background-color: #ff9800 !important;
+}
+.bus-steering-wheel {padding-left: 0px;display: flex;justify-content: center;}
+@media (min-width: 992px) {
+    .btn-sale-group { }
+}
+@media (max-width: 768px) {
+    .bus-steering-wheel {padding-left: 0px;}
+}
+div.seatCharts-container {border-right: 1px dotted rgb(173, 173, 173);padding: 20px;margin: auto;border: 2px solid #efefef;padding-top: 1px;width: 275px;border-top: 0;border-radius: 0px 0px 5px 5px;margin-bottom: 20px;background: #fdfefe;}
+div.seatCharts-legend { padding-left: 0px; position: relative; }
+ul.seatCharts-legendList { padding-left: 0px; }
+span.seatCharts-legendDescription { margin-left: 5px; line-height: 30px; }
+.btn-checkout { margin: 10px 0px; font-size: 14px; }
+#selected-seats {display: block;min-height: 90px;}
+#cartTable { width: 100%; }
+#table-div { }
+.fa-steering-wheel { height: 35px !important; width: 35px !important; }
+.modal-legend > ul.seatCharts-legendList { margin-bottom: 0px !important; }
+.modal-legend > ul.seatCharts-legendList > li.seatCharts-legendItem { margin-top: 0px !important; margin-bottom: 0px !important; }
+.btn-circle:focus { border: 1px solid rgb(58, 120, 195); }
+.seatCharts-seat.seatCharts-cell.female-booked {
+    cursor: not-allowed;
+}
+.popover-panel-wrapper-tol td.poup-td {
+    border: 1px solid #e9ecef !important;
+}

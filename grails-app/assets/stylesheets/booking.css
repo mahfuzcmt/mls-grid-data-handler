@@ -1,0 +1,82 @@
+.seat-panel{
+	margin: auto;
+	float: left;
+	padding-left: 25%;
+}
+div .seatCharts-seat{
+	/* width: 30px; */
+	/* height: 25px; */
+}
+.seatCharts-row div:first-child{
+	display: none;
+}
+.seatCharts-row div:nth-child(even){
+	/* width: 30px; */
+}
+div.seatCharts-seat.selected{
+	background: black;
+}
+.booking-details{
+	margin: auto;
+}
+.seatCharts-cell.seatCharts-space {
+	/* height: 20px; */
+	/* width: 25px; */
+}
+
+.seatCharts-row.seatCharts-header {
+	display: none;
+}
+
+div.seatCharts-seat.available {
+	/* background-color: #2196f3; */
+}
+
+div .seatCharts-seat {
+	/* height: 25px; */
+	/* width: 30px; */
+	/* padding: 4px; */
+}
+
+.seatCharts-row div:nth-child(even) {
+	/* width: 30px; */
+}
+
+.form-action-panel {
+	padding: 10px;
+}
+span.seatCharts-legendDescription {
+	/* font-size: 12px; */
+}
+
+.seatCharts-legendItem .seatCharts-seat.seatCharts-cell {
+	/* height: 25px; */
+	/* width: 50px; */
+}
+.form-action-panel.top-right-corner {
+	float: right;
+}
+.seatCharts-cell.seatCharts-space {
+	/* width: 29px !important; */
+}
+
+div.seatCharts-row {
+	/* height: 30px !important; */
+}
+.selected-book-seats-item {
+	font-size: 13px;
+}
+
+
+.total-flare-title.orange-bold-text {
+	font-size: 14px;
+}
+span#selected-seats-count {
+	font-weight: 600;
+}
+.seatCharts-seat.seatCharts-cell.booked-female:after {
+	content: "\1F64E";
+}
+.seatCharts-seat.seatCharts-cell.booked:after {
+	content: "\1F935";
+}

@@ -1,0 +1,347 @@
+/*
+* This is a manifest file that'll be compiled into application.css, which will include all the files
+* listed below.
+*
+* Any CSS file within this directory can be referenced here using a relative path.
+*
+* You're free to add application-wide styles to this file and they'll appear at the top of the
+* compiled file, but it's generally better to create a new file per style scope.
+*
+*= require bootstrap
+*= require style
+*= require font-awesome/css/all.min
+*= require jquery-confirm.min
+*= require_self
+*/
+
+nav.navbar.navbar-expand-lg.navbar-dark.fixed-top.bg-dark.rounded {
+    /* background: #2196f3!important; */
+    /* border-radius: 0 !important; */
+}
+
+main.list-view-container.col-sm-9.ml-sm-auto.col-md-10.pt-3 {
+    max-width: 100.00% !important;
+    flex: 0 0 100%;
+}
+
+.bus-system-list-view.card .card-body {
+    padding: 0;
+}
+
+.bus-system-list-view.card .table .thead-dark th {
+    color: #ffffff;
+    background-color: #0089f7!important;
+    border-color: #f2f2f2;
+    text-align: center;
+    padding: 6px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.bus-system-list-view .table-bordered th, .bus-system-list-view .table-bordered td {
+    border: 1px solid #dee2e6;
+    text-align: center;
+    padding: 0.2rem;
+    vertical-align: middle;
+}
+
+.bus-system-list-view span.badge.badge-success {
+    padding: 0.7em 1em;
+}
+
+.bus-system-list-view a.btn.btn-secondary {
+    background-color: #607d8b;
+    border-color: #ffffff;
+}
+
+.bus-system-list-view  .card-header {
+    border: 1px solid #fff;
+    padding: 0.55rem 1rem;
+}
+
+.bus-system-list-view span.badge-secondary {
+    padding: 0.7em 0.5em;
+}
+.navbar-dark .navbar-nav .nav-link {
+    color: #fff;
+}
+
+.bus-system-list-view.card .table .thead-dark th a {
+    color: #fff;
+}
+span.badge.badge-primary {
+    padding: 8px;
+}
+body {
+    background-color: #f9f9f9;
+}
+
+.common-list-table-view-ui div#search-area {
+    padding-bottom: 13px;
+}
+
+.sidenav-header {
+    background: url(https://gos3.ibcdn.com/bus-1616762332.png);
+}
+span.badge.badge-sm.badge-primary.price-amount-badge {
+    display: inline-block;
+    font-size: .85em;
+    font-weight: 500;
+    padding: 8px;
+    letter-spacing: 1px;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+}
+
+
+a.nav-link.mb-0.px-0.py-1.user-status.active {
+    color: #fff;
+    background-image: linear-gradient(310deg, #17ad37 0%, #98ec2d 100%);
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+}
+
+
+a.nav-link.mb-0.px-0.py-1.active.user-type {
+    color: #fff;
+    background-image: linear-gradient(310deg, #2196f3 0%, #5dcdff 100%);
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+    margin-left: 10px;
+}
+
+.register-form-ots{
+    margin-top: -23rem !important;
+}
+
+a.btn.btn-secondary.seat-ticket-book-button{
+    background: #4caf50;
+    margin-right: 10px;
+}
+
+a.btn.btn-secondary.seat-ticket-book-button .fa {
+    -webkit-transform: rotate(270deg);
+    transform: rotate(316deg);
+    color: #ffffff;
+    font-size: 14px;
+}
+
+div#search-area .btn.btn-sm {
+    margin-bottom: 0rem !important;
+    padding-top: 5px;
+    padding: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+div#search-area .btn.btn-sm i.fas.fa-search {
+    font-size: 0.8rem;
+}
+div#search-area select#colName {
+    padding-right: 17px;
+    background: #e7e7e7;
+    color: #878787;
+}
+
+div#search-area select#colValue {
+    padding-left: 15px;
+}
+div#search-area input.form-control {
+    padding-left: 15px;
+}
+.common-list-table-view-ui tr.no-data-found-row {
+    text-align: center;
+}
+
+.spanner{
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    display:block;
+    text-align:center;
+
+    color: #fff;
+    transform: translateY(-50%);
+
+
+}
+
+.overlay{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgb(96 125 139 / 63%);
+    visibility: hidden;
+    left: 0;
+    top              : 0;
+    bottom           : 0;
+
+    right            : 0;
+}
+
+.loader,
+.loader:before,
+.loader:after {
+    border-radius: 50%;
+    width: 2.5em;
+    height: 2.5em;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation: load7 1.8s infinite ease-in-out;
+    animation: load7 1.8s infinite ease-in-out;
+}
+.loader {
+    color: #ffffff;
+    font-size: 10px;
+    position: relative;
+    text-indent: -9999em;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation-delay: -0.16s;
+    animation-delay: -0.16s;
+}
+.loader:before,
+.loader:after {
+    content: '';
+    position: absolute;
+    top: 0;
+}
+.loader:before {
+    left: -3.5em;
+    -webkit-animation-delay: -0.32s;
+    animation-delay: -0.32s;
+}
+.loader:after {
+    left: 3.5em;
+}
+@-webkit-keyframes load7 {
+    0%,
+    80%,
+    100% {
+        box-shadow: 0 2.5em 0 -1.3em;
+    }
+    40% {
+        box-shadow: 0 2.5em 0 0;
+    }
+}
+@keyframes load7 {
+    0%,
+    80%,
+    100% {
+        box-shadow: 0 2.5em 0 -1.3em;
+    }
+    40% {
+        box-shadow: 0 2.5em 0 0;
+    }
+}
+
+.show{
+    visibility: visible;
+}
+
+.spanner, .overlay{
+    opacity: 0;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.spanner.show, .overlay.show {
+    opacity: 1;
+    z-index: 99;
+}
+
+.input-group-addon:last-child {
+    border-left: 0;
+}
+.input-group .form-control:last-child, .input-group-addon:last-child, .input-group-btn:last-child > .btn, .input-group-btn:last-child > .btn-group > .btn, .input-group-btn:last-child > .dropdown-toggle, .input-group-btn:first-child > .btn:not(:first-child), .input-group-btn:first-child > .btn-group:not(:first-child) > .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.input-group-addon {
+    padding: 10px 13px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1;
+    color: #555;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.input-group-addon, .input-group-btn {
+    white-space: nowrap;
+    vertical-align: middle;
+}
+.input-group-addon, .input-group-btn, .input-group .form-control {
+    display: table-cell;
+}
+
+.advance-ticket-book-ui-header {
+    box-shadow: 0 0 1px #adaaaa;
+}
+
+.action-button-ticket-search-ui {
+    padding-top: 1.5rem;
+    /* padding-right: 8%; */
+}
+.advance-ticket-book-ui-header label.control-label {
+    color: #3eb142;
+}
+
+#advance-ticket-book-ui-body .empty-state {
+    text-align: center;
+}
+
+#advance-ticket-book-ui-body {
+    justify-content: center;
+}
+
+@media only screen and (max-width: 1150px) {
+
+    form#SearchScheduleFrom.advance-ticket-book-ui-header .row {
+        display: contents;
+    }
+
+}
+.advance-ticket-book-ui-header .row {
+    padding-right: 1%;
+}
+.swal-footer {
+    display: flex;
+    z-index: 1;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 1.25em auto 0;
+}
+span#ticket-date-schedule {
+    padding-left: 10px;
+}
+span.boardingtime-title-header {
+    margin-left: 1px;
+}
+.card-header.booking-details-daily-trip {
+    justify-content: center;
+    display: flex;
+}
+label.error {
+    color: #ff0000;
+    font-weight: 500;
+    left: 2px;
+    top: 37px;
+    display: none !important;
+}
+input.error {
+    border: 1px solid #ff5722;
+}

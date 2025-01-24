@@ -1,0 +1,296 @@
+.card-body {
+    display: flex;
+}
+
+.seat-plan-design {
+    /* width: 45%; */
+    /* border-right: solid 3px #e9ecef; */
+}
+
+.seat-info-booking-info {
+    padding-left: 5%;
+    width: 100%;
+}
+
+ul.seatCharts-legendList {
+    /* display: flex; */
+    /* text-align: center; */
+}
+
+li.seatCharts-legendItem {
+    margin: 10px 5px;
+    line-height: 2;
+    display: inline-block;
+    border: 1px solid #ffffff;
+    border-radius: 4px;
+    padding-right: 4px;
+    box-shadow: 1px 2px 3px 0px rgb(176 176 176 / 75%);
+}
+div.seatCharts-seat {
+    background-color: #ff9800;
+    /* color: white; */
+    /* -webkit-border-radius: 5px; */
+    -moz-border-radius: 5px;
+    /* border-radius: 5px; */
+    /* cursor: default; */
+}
+
+.seat-info table.table.information_table.table-responsive {
+    border: 1px solid #e9ecef;
+}
+.seat-info span#selected-seats {
+    display: block;
+    min-height: 60px;
+}
+p.total-paid-title.font_detail.fw-bold {
+    font-weight: 500;
+}
+.total-flare-title {
+    color: #1062a2;
+    font-family: 'Open Sans';
+    font-weight: 600;
+}
+@media only screen and (max-width: 600px) {
+
+    div.seatCharts-container {
+        /* border-right: none !important */
+    }
+
+    .card-body.seat-booking-panel-with-seat-plan-design {
+        display: grid;
+    }
+
+    .card-body.seat-booking-panel-with-seat-plan-design .seat-info-booking-info {
+        margin-top: 50px;
+    }
+
+    .card-body.seat-booking-panel-with-seat-plan-design .seat-plan-design {
+        border: none;
+    }
+
+    .seat-panel {
+        padding-left: 18%;
+    }
+
+    ul.seatCharts-legendList {
+        padding-left: 0rem;
+    }
+
+    .seat-info table.table.information_table.table-responsive {
+        width: 18rem !important;
+    }
+
+}
+
+@media only screen and (max-width: 986px) {
+
+    .col-sm-12{
+        flex: 0 0 auto;
+        width: 100%;
+    }
+
+}
+
+@media only screen and (min-width: 600px) {
+
+    .seatCharts-cell.seatCharts-space {
+        width: 39px !important;
+    }
+
+}
+
+
+
+.seat-plan-design {
+    /* padding-right: 5rem; */
+}
+
+.booking-info p.font_detail {
+    font-size: 0.8rem;
+    font-family: Helvetica Neue;
+    font-style: normal;
+}
+
+.booking-info td .form-control {
+    margin-bottom: 6px;
+}
+
+.fa-steering-wheel {
+    height: 35px !important;
+    width: 35px !important;
+}
+.fa-steering-wheel {
+    display: block;
+    text-indent: -9999px;
+    background-image: url(/assets/steering-wheel.svg);
+    width: 23px;
+    height: 23px;
+}
+
+#table-div thead tr {
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+
+#table-div table thead th {
+    padding: 5px;
+    font-size: 14px;
+    color: #fff;
+}
+
+
+div#seatPlanModal div.seatCharts-container {
+    border-right: 1px dotted rgb(255 255 255);
+    padding-left: 25%;
+}
+
+
+.input-group-addon:last-child {
+    border-left: 0;
+}
+.input-group .form-control:last-child, .input-group-addon:last-child, .input-group-btn:last-child > .btn, .input-group-btn:last-child > .btn-group > .btn, .input-group-btn:last-child > .dropdown-toggle, .input-group-btn:first-child > .btn:not(:first-child), .input-group-btn:first-child > .btn-group:not(:first-child) > .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.input-group-addon {
+    padding: 10px 13px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1;
+    color: #555;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.input-group-addon, .input-group-btn {
+    white-space: nowrap;
+    vertical-align: middle;
+}
+.input-group-addon, .input-group-btn, .input-group .form-control {
+    display: table-cell;
+}
+
+.advance-ticket-book-ui-header {
+    box-shadow: 0 0 1px #adaaaa;
+}
+
+.action-button-ticket-search-ui {
+    padding-top: 1.5rem;
+    /* padding-right: 8%; */
+}
+.advance-ticket-book-ui-header label.control-label {
+    color: #3eb142;
+}
+
+#advance-ticket-book-ui-body .empty-state {
+    text-align: center;
+}
+
+#advance-ticket-book-ui-body {
+    justify-content: center;
+}
+
+@media only screen and (max-width: 1150px) {
+
+    form#SearchScheduleFrom.advance-ticket-book-ui-header .row {
+        display: contents;
+    }
+
+}
+.advance-ticket-book-ui-header .row {
+    padding-right: 1%;
+}
+
+span.boardingtime-title-header {
+    background: #5ed694;
+    padding: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    border-radius: 4px;
+    display: inline-block;
+    color: #fff;
+}
+
+span.route-title-header {
+    background: #74b3de;
+    padding: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    border-radius: 4px;
+    display: inline-block;
+    color: #fff;
+}
+.form-row.book-sell-button-row {
+    display: flex;
+    justify-content: center;
+}
+.row.booking-legend-row {
+    justify-content: center;
+}
+
+.row.booking-legend-row div#legend {
+    display: flex;
+    justify-content: center;
+}
+button.ticket-render-button-popover.btn.btn-primary.btn-sm {
+    height: 31px;
+    margin-bottom: 0;
+}
+a.cancel-cart-item {
+    background: #f44336;
+    color: #fff;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 0 3px 3px 0;
+    padding-bottom: 6px;
+    padding-top: 6px;
+}
+
+.selected-book-seats-item {height: 30px;margin-top: 7px;list-style-type: "\1F68C";}
+
+span#selected-seats {
+    margin-top: 6px;
+}
+
+a.cancel-cart-item:hover {
+    background: #353535;
+}
+
+.selected-book-seats-item b {padding: 5px;background: #fff;border: 1px dotted #4caf50;border-radius: 3px 0 0 3px;}
+
+.female-sold, div.seatCharts-seat.female-sold::after {
+    content: "\1F64E";
+}
+
+div.seatCharts-seat.unavailable::after {
+    content: "\1F935";
+}
+
+div.seatCharts-seat.holding::after{
+    content: "";
+}
+img.seat-front-view {
+    width: 275px;
+    margin-bottom: 0px;
+}
+tr#selected-seats-details-row {
+    background: #fff;
+    height: 29px;
+}
+
+tr.selected-book-seats-item td {
+    width: 50%;
+}
+
+.ticket-details-popover .popover-title.male::after {
+    content: "\1F935";
+}
+
+.ticket-details-popover .popover-title.female::after {
+    content: "\1F64E";
+}
+
+.seatCharts-seat.seatCharts-cell.booked-female {
+    background: #8bc34a;
+}
