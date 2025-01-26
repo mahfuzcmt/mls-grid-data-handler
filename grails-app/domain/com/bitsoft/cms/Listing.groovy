@@ -44,13 +44,12 @@ class Listing {
 
     Boolean parkingGarage
 
-    Collection<ListingMedia> media
+   Collection<Media> media
 
-    static hasMany = [media: ListingMedia]
+    static hasMany = [media: Media]
 
     static constraints = {
         listingKey nullable: false
-        media nullable: true
         streetAddress nullable: true
         streetNumber nullable: true
         streetDirPrefix nullable: true
@@ -86,7 +85,6 @@ class Listing {
     }
 
     static mapping = {
-        media type: 'text'
         publicRemarks type: 'text'
     }
 

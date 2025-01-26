@@ -11,7 +11,7 @@ class MlsService {
 
     String mlsGridAPIKey = "38e0a05020fd4fdf29430a851686d691dca9f957"
 
-    String modificationTimestampFromDB = "2025-01-01T00:00:00Z" // Replace this with the greatest ModificationTimestamp from your database
+    String modificationTimestampFromDB = "2025-01-26T00:00:00Z" // Replace this with the greatest ModificationTimestamp from your database
     int FETCH_TOP = 5
 
     String mlsGridAPIURL = "https://api.mlsgrid.com/v2/Property?" +
@@ -33,7 +33,7 @@ class MlsService {
             String formattedDate = zonedDateTime.format(formatter)
             mlsGridAPIURL.replaceAll("%modificationTimestampFromDB%", formattedDate)
         } else {
-            mlsGridAPIURL.replaceAll("%modificationTimestampFromDB%", "\"2000-01-01T00:00:00Z\"")
+            mlsGridAPIURL.replaceAll("%modificationTimestampFromDB%", "2025-01-01T20:14:08Z")
         }
     }
 
@@ -153,13 +153,38 @@ class MlsService {
         }
     }
 
+    List formatMediaData(List mediaList) {
+        if (!mediaList) {
+            return []
+        }
+        List parsedMediaList = []
+        mediaList.each {
+            Map mediaInfo = [:]
+
+            mediaInfo.idx = it["Order"]
+            mediaInfo.resourceRecordKey = it["ResourceRecordKey"]
+            mediaInfo.mediaObjectID = it["MediaObjectID"]
+            mediaInfo.longDescription = it["LongDescription"]
+            mediaInfo.imageWidth = it["ImageWidth"]
+            mediaInfo.imageHeight = it["ImageHeight"]
+            mediaInfo.imageSizeDescriptio = it["ImageSizeDescriptio"]
+            mediaInfo.mediaURL = it["MediaURL"]
+            mediaInfo.mediaModificationTimestamp = it["MediaModificationTimestamp"]
+            mediaInfo.mediaKey = it["MediaKey"]
+            mediaInfo.created = new Date()
+            mediaInfo.updated = new Date()
+            parsedMediaList.add(mediaInfo)
+        }
+        return parsedMediaList
+    }
+
+
     @Transactional
     private void saveOrUpdateListing(Map listingData) {
         // Map JSON keys to domain class properties
         def mappedData = [
                 listingKey              : listingData.ListingKey,
-                media                   : listingData.Media,
-                streetAddress           : listingData.StreetAddress,
+                streetAddress           : "${listingData.StreetNumber} ${listingData.StreetDirPrefix ?: ''} ${listingData.StreetName} ${listingData.StreetSuffix ?: ''}".trim(),
                 streetNumber            : listingData.StreetNumber,
                 streetDirPrefix         : listingData.StreetDirPrefix ?: '',
                 streetName              : listingData.StreetName,
@@ -190,7 +215,8 @@ class MlsService {
                 listingContractDate     : listingData.ListingContractDate,
                 sqFtFinishedBuilding    : listingData.SqFtFinishedBuilding as Integer,
                 buildingAreaTotal       : listingData.BuildingAreaTotal as Integer,
-                parkingGarage           : listingData.ParkingGarage as Boolean
+                parkingGarage           : listingData.ParkingGarage as Boolean,
+                media                   : formatMediaData(listingData.Media),
         ]
 
 

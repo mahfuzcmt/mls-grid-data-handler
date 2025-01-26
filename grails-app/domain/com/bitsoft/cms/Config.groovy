@@ -6,6 +6,9 @@ class Config {
 
     Long lastTimeStamp
 
+    String url
+    String apiKey
+
     Date lastImport
     Date created
     Date updated
@@ -13,6 +16,8 @@ class Config {
     static belongsTo = []
 
     static constraints = {
+        url nullable: true
+        apiKey nullable: true
         lastTimeStamp nullable: true
     }
 

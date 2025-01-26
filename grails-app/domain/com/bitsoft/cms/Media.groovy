@@ -1,9 +1,9 @@
 package com.bitsoft.cms
 
-class ListingMedia {
+class Media {
 
     String resourceRecordKey
-    String order
+    String idx
     String mediaObjectID
     String longDescription
     String imageWidth
@@ -18,7 +18,7 @@ class ListingMedia {
 
     static constraints = {
         resourceRecordKey nullable: true, blank: false
-        order nullable: true
+        idx nullable: true
         mediaObjectID nullable: true, blank: false
         longDescription nullable: true, maxSize: 5000
         imageWidth nullable: true
