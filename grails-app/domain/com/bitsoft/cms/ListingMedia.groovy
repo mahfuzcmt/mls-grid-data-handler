@@ -2,8 +2,6 @@ package com.bitsoft.cms
 
 class ListingMedia {
 
-    Long id
-
     String resourceRecordKey
     String order
     String mediaObjectID
