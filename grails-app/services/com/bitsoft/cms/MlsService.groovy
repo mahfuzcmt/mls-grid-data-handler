@@ -3,20 +3,46 @@ package com.bitsoft.cms
 import grails.gorm.transactions.Transactional
 import groovy.json.JsonSlurper
 
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+
 
 class MlsService {
 
     String mlsGridAPIKey = "38e0a05020fd4fdf29430a851686d691dca9f957"
-    String mlsGridAPIURL = "https://api.mlsgrid.com/v2/Property?%24filter=StandardStatus%20eq%20%27Active%27%20or%20StandardStatus%20eq%20%27ComingSoon%27"
-    int fetchTop = 5
+
+    String modificationTimestampFromDB = "2025-01-01T00:00:00Z" // Replace this with the greatest ModificationTimestamp from your database
+    int FETCH_TOP = 5
+
+    String mlsGridAPIURL = "https://api.mlsgrid.com/v2/Property?" +
+            "%24filter=StandardStatus%20eq%20%27Active%27%20or%20StandardStatus%20eq%20%27ComingSoon%27%20and%20ModificationTimestamp%20gt%20%modificationTimestampFromDB%" +
+            "&%24top=${FETCH_TOP}" +
+            "&%24expand=Media"
+
+
     List<String> validStatuses = ['Active', 'ComingSoon']
     List<String> validPropertyTypes = ['Commercial Sale', 'Farm', 'Land', 'Residential', 'ResidentialIncome']
     List<String> invalidListings = []
 
+    private String getURL(){
+        Config config = Config.last()
+        if (config) {
 
-    void fetchMLSData(String url = mlsGridAPIURL, int retryCount = 0) {
+            ZonedDateTime zonedDateTime = config.lastImport.toInstant().atZone(java.time.ZoneId.of("UTC"))
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+            String formattedDate = zonedDateTime.format(formatter)
+            mlsGridAPIURL.replaceAll("%modificationTimestampFromDB%", formattedDate)
+        } else {
+            mlsGridAPIURL.replaceAll("%modificationTimestampFromDB%", "\"2000-01-01T00:00:00Z\"")
+        }
+    }
+
+    void fetchMLSData(String url, int retryCount = 0, Boolean isInitial = false) {
         try {
             // Open connection
+            if(!url){
+                url = getURL()
+            }
             def connection = new URL(url).openConnection()
             connection.setRequestProperty("Authorization", "Bearer $mlsGridAPIKey")
             connection.setRequestProperty("Content-Type", "application/json")

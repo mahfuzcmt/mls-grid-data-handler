@@ -9,6 +9,6 @@ class MlsJob {
     }
 
     def execute() {
-        mlsService.fetchMLSData(mlsService.mlsGridAPIURL)
+        mlsService.fetchMLSData(null)
     }
 }

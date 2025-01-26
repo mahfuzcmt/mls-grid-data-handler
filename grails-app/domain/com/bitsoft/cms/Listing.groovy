@@ -3,7 +3,6 @@ package com.bitsoft.cms
 class Listing {
 
     String listingKey
-    String media
     String streetAddress
     String streetNumber
     String streetDirPrefix
@@ -44,6 +43,10 @@ class Listing {
     Integer buildingAreaTotal
 
     Boolean parkingGarage
+
+    Collection<ListingMedia> media
+
+    static hasMany = [media: ListingMedia]
 
     static constraints = {
         listingKey nullable: false

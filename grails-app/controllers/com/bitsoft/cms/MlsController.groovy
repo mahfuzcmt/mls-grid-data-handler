@@ -92,7 +92,7 @@ class MlsController {
     }
 
     def create() {
-        [user: mlsService.fetchMLSData()]
+        [user: mlsService.fetchMLSData(null)]
     }
 
 
