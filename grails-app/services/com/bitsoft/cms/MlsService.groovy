@@ -12,7 +12,7 @@ class MlsService {
     String mlsGridAPIKey = "38e0a05020fd4fdf29430a851686d691dca9f957"
 
     String modificationTimestampFromDB = "2025-01-26T00:00:00Z" // Replace this with the greatest ModificationTimestamp from your database
-    int FETCH_TOP = 5
+    int FETCH_TOP = 500
 
     String mlsGridAPIURL = "https://api.mlsgrid.com/v2/Property?" +
             "%24filter=StandardStatus%20eq%20%27Active%27%20or%20StandardStatus%20eq%20%27ComingSoon%27%20and%20ModificationTimestamp%20gt%20%modificationTimestampFromDB%" +
@@ -95,6 +95,11 @@ class MlsService {
             config.lastTimeStamp = System.currentTimeMillis()
             config.lastImport = new Date()
             config.updated = new Date()
+           /* try {
+                config.lastImport = Date.from(ZonedDateTime.parse(listings.last()["ModificationTimestamp"]).toInstant())
+            } catch (Exception e) {
+                config.lastImport = new Date()
+            }*/
             config.save()
 
             // Handle next link

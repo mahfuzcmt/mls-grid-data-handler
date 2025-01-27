@@ -8,7 +8,8 @@ grails:
             # Whether to translate GORM events into Reactor events
             # Disabled by default for performance reasons
             events: false
-        #multiTenancy:
+            # Multi-tenancy is commented out; uncomment and configure if needed.
+            #multiTenancy:
             #mode: DATABASE
             #tenantResolverClass: org.grails.datastore.mapping.multitenancy.web.SubDomainTenantResolver
 info:
@@ -47,22 +48,22 @@ grails:
             csv: text/csv
             form: application/x-www-form-urlencoded
             html:
-              - text/html
-              - application/xhtml+xml
+                - text/html
+                - application/xhtml+xml
             js: text/javascript
             json:
-              - application/json
-              - text/json
+                - application/json
+                - text/json
             multipartForm: multipart/form-data
             pdf: application/pdf
             rss: application/rss+xml
             text: text/plain
             hal:
-              - application/hal+json
-              - application/hal+xml
+                - application/hal+json
+                - application/hal+xml
             xml:
-              - text/xml
-              - application/xml
+                - text/xml
+                - application/xml
     urlmapping:
         cache:
             maxsize: 1000
@@ -81,6 +82,14 @@ grails:
                 scriptlets: html
                 taglib: none
                 staticparts: none
+
+quartz:
+    autoStartup: true  # Ensures Quartz starts automatically
+    jdbcStore: false   # Set to true if using database-backed job store
+    scheduler:
+        instanceName: GrailsQuartzScheduler
+        threadCount: 5 # Adjust thread count for job execution
+
 endpoints:
     jmx:
         unique-names: true

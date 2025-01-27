@@ -32,6 +32,7 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
             pattern = "%level %logger - %msg%n"
         }
     }
-    logger("StackTrace", ERROR, ['FULL_STACKTRACE'], true)
 }
+logger("StackTrace", ERROR, ['FULL_STACKTRACE'], true)
+logger('org.quartz', DEBUG, ['STDOUT'], false)
 root(ERROR, ['STDOUT'])
