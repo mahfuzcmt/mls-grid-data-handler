@@ -8,11 +8,12 @@ import org.grails.datastore.mapping.model.PersistentEntity
 class BootStrap {
 
     DefaultGrailsApplication grailsApplication
+    def quartzScheduler
 
     def init = { servletContext ->
 
         Collection<PersistentEntity> entities = grailsApplication.mappingContext.persistentEntities
-
+        quartzScheduler.start()
         initializeDomain(entities)
 
 //        Tenants.eachTenant{ String tenant ->

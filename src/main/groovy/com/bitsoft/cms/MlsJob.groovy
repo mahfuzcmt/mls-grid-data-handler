@@ -1,30 +1,22 @@
 package com.bitsoft.cms
 
+import org.quartz.JobExecutionContext
+import org.quartz.JobExecutionException
 
 class MlsJob {
 
-    def sessionRequired = false
-
-    static long interval = 6000
-
     static triggers = {
-        cron name: 'mlsJobTrigger', cronExpression: '0/10 * * * * ?' // Runs every 10 seconds
+        simple name: 'mlsJobTrigger', startDelay: 1000, repeatInterval: 1000
+        // Example cron trigger:
+        // cron name: 'myCronTrigger', cronExpression: "0 0/5 * * * ?" // Every 5 minutes
     }
 
-
-    def execute() {
+    def execute(JobExecutionContext context) throws JobExecutionException {
         try {
-            Date trigDate = new Date(((long) (new Date().gmt().time / interval)) * interval)
-            String trigTime = trigDate.format("HH-mm")
-            String trigMinute = trigDate.format("mm")
-            String trigDateTime = trigDate.format("yyyy-MM-dd-HH-mm")
-
-            println("trigTime: $trigTime")
-            println("trigMinute: $trigMinute")
-            println("trigDateTime: $trigDateTime")
+            println("Executing MlsJob at: ${new Date()}")
+            // Your business logic here
         } catch (Exception e) {
             log.error("Job execution failed: ", e)
         }
     }
-
 }
