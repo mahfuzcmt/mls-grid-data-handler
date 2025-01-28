@@ -1,3 +1,4 @@
+%{--
 <%@ page import="com.bitsoft.mls.Circle; com.bitsoft.mls.Designation; com.bitsoft.mls.GlobalConfig" %>
 <div class="form-group">
     <label><g:message code="first.name"/> *</label>
@@ -32,10 +33,12 @@
     <UIHelper:domainSelect class="form-control" domain="${Designation}" name="designation" value="${user?.designation ? user?.designation?.id : null}"/>
 </div>
 
+--}%
 %{--<div class="form-group">
     <label>Circles</label>
     <UIHelper:domainSelect multiple="true" class="form-control" domain="${Circle}" name="circles" value="${user?.circles ? user?.circles?.id : null}"/>
-</div>--}%
+</div>--}%%{--
+
 
 <g:if test="${!edit}">
     <div class="form-group">
@@ -44,3 +47,4 @@
         <UIHelper:renderErrorMessage fieldName="password" model="${user}" errorMessage="Please Enter a Password."/>
     </div>
 </g:if>
+--}%
