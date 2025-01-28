@@ -43,9 +43,19 @@ class MlsService {
         }
     }
 
+
+    private void downloadImages(){
+
+    }
+
+
+    private void removeImages(){
+
+    }
+
+
     void fetchMLSData(String url, int retryCount = 0, Boolean isInitial = false) {
         try {
-            // Open connection
             if(!url){
                 url = getURL()
             }
@@ -212,6 +222,7 @@ class MlsService {
             existingListing.properties = mappedData
             existingListing.updated = new Date()
             if (existingListing.save()) {
+                //TODO update images
                 log.info "Listing ${listingData.ListingKey} updated successfully"
             } else {
                 log.error "Failed to update listing ${listingData.ListingKey}: ${existingListing.errors.allErrors}"
@@ -221,6 +232,7 @@ class MlsService {
             newListing.created = new Date()
             newListing.updated = new Date()
             if (newListing.save()) {
+                //TODO add images
                 log.info "Listing ${listingData.ListingKey} created successfully"
             } else {
                 log.error "Failed to create listing ${listingData.ListingKey}: ${newListing.errors.allErrors}"
@@ -232,6 +244,7 @@ class MlsService {
     private void deleteInvalidListings(List<String> listingKeys) {
         try {
             Listing.where { listingKey in listingKeys }.deleteAll()
+            //TODO remove images
             log.info "Deleted invalid listings: ${listingKeys}"
         } catch (Exception e) {
             log.error("Deleted invalid listings: ${e.message}")
