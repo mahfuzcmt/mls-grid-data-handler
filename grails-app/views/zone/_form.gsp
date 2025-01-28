@@ -1,4 +1,4 @@
-<%@ page import="com.bitsoft.cms.GlobalConfig" %>
+<%@ page import="com.bitsoft.mls.GlobalConfig" %>
 <div class="form-group">
     <label><g:message code="Name"/></label>
     <g:textField name="name" class="form-control" value="${zone?.name}" placeholder="Enter zone name"/>

@@ -28,12 +28,9 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
         file = "${targetDir}/stacktrace.log"
         append = true
         encoder(PatternLayoutEncoder) {
-            charset = StandardCharsets.UTF_8
             pattern = "%level %logger - %msg%n"
         }
     }
+    logger("StackTrace", ERROR, ['FULL_STACKTRACE'], true)
 }
-logger("StackTrace", ERROR, ['FULL_STACKTRACE'], true)
-logger('org.quartz', DEBUG, ['STDOUT'], false) // Capture DEBUG and above for org.quartz
-root(INFO, ['STDOUT']) // Set root logger to INFO level
 root(ERROR, ['STDOUT'])

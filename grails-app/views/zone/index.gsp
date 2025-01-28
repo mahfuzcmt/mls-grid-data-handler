@@ -1,4 +1,4 @@
-<%@ page import="com.bitsoft.cms.GlobalConfig" %>
+<%@ page import="com.bitsoft.mls.GlobalConfig" %>
 %{--Include Main Layout--}%
 <meta name="layout" content="main"/>
 

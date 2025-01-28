@@ -1,30 +1,42 @@
 ---
 grails:
     profile: web
+    grails:
+        profiles: web
+    environments:
+        development:
+            global:
+                user:
+                    photoDir: "grails-app/assets/images/user-photos"  # Path for development
+        production:
+            global:
+                user:
+                    photoDir: "/var/lib/tomcat8/webapps/listing/images/"  # Path for production
     codegen:
-        defaultPackage: online.ticket.booking.system
+        defaultPackage: com.bitsoft.mls
     gorm:
         reactor:
             # Whether to translate GORM events into Reactor events
             # Disabled by default for performance reasons
             events: false
-            # Multi-tenancy is commented out; uncomment and configure if needed.
-            #multiTenancy:
-            #mode: DATABASE
-            #tenantResolverClass: org.grails.datastore.mapping.multitenancy.web.SubDomainTenantResolver
 info:
     app:
         name: '@info.app.name@'
         version: '@info.app.version@'
         grailsVersion: '@info.app.grailsVersion@'
 spring:
+    servlet:
+        multipart:
+            enabled: true  # Ensure multipart support is enabled
+            max-file-size: 10MB   # Adjust to the required size, e.g., 10MB
+            max-request-size: 10MB # Adjust to the required size
+            file-size-threshold: 2MB # Threshold for writing files to disk, adjust as needed
     main:
         banner-mode: "off"
     groovy:
         template:
             check-template-location: false
 
-# Spring Actuator Endpoints are Disabled by Default
 endpoints:
     enabled: false
     jmx:
@@ -68,6 +80,9 @@ grails:
         cache:
             maxsize: 1000
     controllers:
+        upload:
+            maxFileSize: 2000000
+            maxRequestSize: 2000000
         defaultScope: singleton
     converters:
         encoding: UTF-8
@@ -82,14 +97,6 @@ grails:
                 scriptlets: html
                 taglib: none
                 staticparts: none
-
-quartz:
-    autoStartup: true  # Ensures Quartz starts automatically
-    jdbcStore: false   # Set to true if using database-backed job store
-    scheduler:
-        instanceName: GrailsQuartzScheduler
-        threadCount: 5 # Adjust thread count for job execution
-
 endpoints:
     jmx:
         unique-names: true
@@ -101,3 +108,6 @@ hibernate:
         use_second_level_cache: false
         use_query_cache: false
 
+logging:
+    level:
+        org.springframework.web.multipart: DEBUG

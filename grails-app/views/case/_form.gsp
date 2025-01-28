@@ -1,4 +1,4 @@
-<%@ page import="com.bitsoft.cms.Organisation; com.bitsoft.cms.Bank; com.bitsoft.cms.Reason; com.bitsoft.cms.Challan; com.bitsoft.cms.Constant" %>
+<%@ page import="com.bitsoft.mls.Organisation; com.bitsoft.mls.Bank; com.bitsoft.mls.Reason; com.bitsoft.mls.Challan; com.bitsoft.mls.Constant" %>
 <asset:javascript src="case.js"/>
 <!-- Tabs navigation -->
 <ul class="nav nav-tabs" role="tablist">

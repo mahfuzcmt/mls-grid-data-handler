@@ -1,4 +1,4 @@
-<%@ page import="com.bitsoft.cms.User; com.bitsoft.cms.Zone; com.bitsoft.cms.Circle; com.bitsoft.cms.Designation; com.bitsoft.cms.GlobalConfig" %>
+<%@ page import="com.bitsoft.mls.User; com.bitsoft.mls.Zone; com.bitsoft.mls.Circle; com.bitsoft.mls.Designation; com.bitsoft.mls.GlobalConfig" %>
 <div class="form-group">
     <label><g:message code="name"/> *</label>
     <g:textField name="name" class="form-control" value="${circle?.name}" placeholder="Please Enter Name"/>

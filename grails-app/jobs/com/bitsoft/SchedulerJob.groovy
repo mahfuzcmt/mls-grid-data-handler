@@ -1,6 +1,6 @@
 package com.bitsoft
 
-import com.bitsoft.cms.MlsService
+import com.bitsoft.mls.MlsService
 
 class SchedulerJob {
     def sessionRequired = false
