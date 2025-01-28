@@ -34,6 +34,6 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
     }
 }
 logger("StackTrace", ERROR, ['FULL_STACKTRACE'], true)
-logger('org.quartz', DEBUG, ['STDOUT'], false)
+logger('org.quartz', DEBUG, ['STDOUT'], false) // Capture DEBUG and above for org.quartz
+root(INFO, ['STDOUT']) // Set root logger to INFO level
 root(ERROR, ['STDOUT'])
-logger('org.quartz', DEBUG)

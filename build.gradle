@@ -72,8 +72,10 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java:8.0.17'
     runtimeOnly "org.apache.tomcat:tomcat-jdbc"
 
-    implementation 'org.grails.plugins:quartz:2.0.13'
-    implementation 'org.quartz-scheduler:quartz:2.2.1'
+    implementation('org.grails.plugins:quartz:2.0.13') {
+        exclude group: 'org.quartz-scheduler', module: 'quartz'
+    }
+    implementation 'org.quartz-scheduler:quartz:2.3.2'
 
 }
 

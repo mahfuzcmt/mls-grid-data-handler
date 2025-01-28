@@ -9,9 +9,6 @@ import java.time.format.DateTimeFormatter
 
 class MlsService {
 
-    String mlsGridAPIKey = "38e0a05020fd4fdf29430a851686d691dca9f957"
-
-    String modificationTimestampFromDB = "2025-01-26T00:00:00Z" // Replace this with the greatest ModificationTimestamp from your database
     int FETCH_TOP = 500
 
     String mlsGridAPIURL = "https://api.mlsgrid.com/v2/Property?" +
@@ -37,6 +34,15 @@ class MlsService {
         }
     }
 
+    private String getConfigKey(){
+        Config config = Config.last()
+        if (config) {
+            return config.getApiKey()
+        } else {
+            return "38e0a05020fd4fdf29430a851686d691dca9f957"
+        }
+    }
+
     void fetchMLSData(String url, int retryCount = 0, Boolean isInitial = false) {
         try {
             // Open connection
@@ -44,7 +50,7 @@ class MlsService {
                 url = getURL()
             }
             def connection = new URL(url).openConnection()
-            connection.setRequestProperty("Authorization", "Bearer $mlsGridAPIKey")
+            connection.setRequestProperty("Authorization", "Bearer ${getConfigKey()}")
             connection.setRequestProperty("Content-Type", "application/json")
             connection.setRequestProperty("Accept", "application/json")
             connection.setRequestProperty("Accept-Encoding", "gzip") // Add gzip compression
