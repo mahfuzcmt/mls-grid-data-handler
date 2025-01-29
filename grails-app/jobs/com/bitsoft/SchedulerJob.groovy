@@ -6,7 +6,7 @@ class SchedulerJob {
     def sessionRequired = false
     MlsService mlsService
 
-    static long interval = 1000 * 60 * 5
+    static long interval = 1000 * 60 * 15
 
     static triggers = {
         simple startDelay: 2000 * 10, repeatInterval: interval
