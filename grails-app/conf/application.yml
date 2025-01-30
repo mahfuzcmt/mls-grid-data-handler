@@ -11,7 +11,7 @@ grails:
         production:
             global:
                 user:
-                    photoDir: "/var/lib/tomcat8/webapps/listing/images/"  # Path for production
+                    photoDir: "/opt/tomcat/images/"  # Path for production
     codegen:
         defaultPackage: com.bitsoft.mls
     gorm:

@@ -10,6 +10,7 @@ class Media {
     String imageHeight
     String imageSizeDescription
     String mediaURL
+    String originalUrl
     String mediaModificationTimestamp
     String mediaKey
 
@@ -24,6 +25,7 @@ class Media {
         imageWidth nullable: true
         imageHeight nullable: true
         imageSizeDescription nullable: true
+        originalUrl nullable: false, blank: false, maxSize: 10000
         mediaURL nullable: false, blank: false, maxSize: 10000
         mediaModificationTimestamp nullable: false
         mediaKey nullable: true

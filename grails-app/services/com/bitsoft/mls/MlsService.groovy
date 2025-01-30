@@ -1,7 +1,9 @@
 package com.bitsoft.mls
 
 import grails.gorm.transactions.Transactional
+import grails.util.Environment
 import groovy.json.JsonSlurper
+import groovy.io.FileType
 
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -149,14 +151,23 @@ class MlsService {
         }
     }
 
-    List formatMediaData(List mediaList) {
+   List formatMediaData(List mediaList) {
         if (!mediaList) {
             return []
         }
+       String photoDir = "/opt/tomcat/images/"
+       if (Environment.isDevelopmentMode()) {
+           photoDir = "grails-app/assets/images/user-photos"
+       }
+
+        File directory = new File(photoDir)
+        if (!directory.exists()) {
+            directory.mkdirs()  // Ensure the directory exists
+        }
+
         List parsedMediaList = []
         mediaList.each {
             Map mediaInfo = [:]
-
             mediaInfo.idx = it["Order"]
             mediaInfo.resourceRecordKey = it["ResourceRecordKey"]
             mediaInfo.mediaObjectID = it["MediaObjectID"]
@@ -164,16 +175,37 @@ class MlsService {
             mediaInfo.imageWidth = it["ImageWidth"]
             mediaInfo.imageHeight = it["ImageHeight"]
             mediaInfo.imageSizeDescriptio = it["ImageSizeDescriptio"]
-            mediaInfo.mediaURL = it["MediaURL"]
+            mediaInfo.originalUrl = it["MediaURL"]
             mediaInfo.mediaModificationTimestamp = it["MediaModificationTimestamp"]
             mediaInfo.mediaKey = it["MediaKey"]
             mediaInfo.created = new Date()
             mediaInfo.updated = new Date()
+
+            // Download and save the image
+            try {
+                String mediaURL = it["MediaURL"]
+                if (mediaURL) {
+                    String fileName = mediaInfo.mediaObjectID ? "${mediaInfo.mediaObjectID}.jpg" : "default_${System.currentTimeMillis()}.jpg"
+                    File imageFile = new File(directory, fileName)
+
+                    // Download and save the image
+                    imageFile.withOutputStream { outputStream ->
+                        outputStream << new URL(mediaURL).openStream()
+                    }
+
+                    // Update the media URL to point to the local file
+                    mediaInfo.mediaURL = imageFile.absolutePath
+                }
+            } catch (Exception e) {
+                println "Failed to download image for MediaObjectID: ${mediaInfo.mediaObjectID}. Error: ${e.message}"
+                mediaInfo.mediaURL = null
+            }
+
             parsedMediaList.add(mediaInfo)
         }
+
         return parsedMediaList
     }
-
 
     @Transactional
     private void saveOrUpdateListing(Map listingData) {
@@ -232,7 +264,6 @@ class MlsService {
             newListing.created = new Date()
             newListing.updated = new Date()
             if (newListing.save()) {
-                //TODO add images
                 log.info "Listing ${listingData.ListingKey} created successfully"
             } else {
                 log.error "Failed to create listing ${listingData.ListingKey}: ${newListing.errors.allErrors}"
@@ -241,13 +272,32 @@ class MlsService {
     }
 
     @Transactional
+    @Transactional
     private void deleteInvalidListings(List<String> listingKeys) {
         try {
-            Listing.where { listingKey in listingKeys }.deleteAll()
-            //TODO remove images
+            List<Listing> listings = Listing.createCriteria().list(){
+                inList("listingKey", listingKeys)
+            }
+            listings.each { Listing listing ->
+                listing.media.each { media ->
+                    if (media.mediaURL) {
+                        try {
+                            File mediaFile = new File(media.mediaURL)
+                            if (mediaFile.exists()) {
+                                mediaFile.delete()
+                                log.info "Deleted media file: ${mediaFile.absolutePath}"
+                            }
+                        } catch (Exception e) {
+                            log.error "Failed to delete media file for Listing ${listing.listingKey}: ${e.message}"
+                        }
+                    }
+                    media.delete()
+                }
+                listing.delete()
+            }
             log.info "Deleted invalid listings: ${listingKeys}"
         } catch (Exception e) {
-            log.error("Deleted invalid listings: ${e.message}")
+            log.error("Error deleting invalid listings: ${e.message}")
         }
     }
 
