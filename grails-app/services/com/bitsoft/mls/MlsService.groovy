@@ -23,17 +23,21 @@ class MlsService {
     List<String> validPropertyTypes = ['Commercial Sale', 'Farm', 'Land', 'Residential', 'ResidentialIncome']
     List<String> invalidListings = []
 
-    private String getURL(){
+    private String getURL() {
         Config config = Config.last()
+        String url
         if (config) {
-
             ZonedDateTime zonedDateTime = config.lastImport.toInstant().atZone(java.time.ZoneId.of("UTC"))
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
             String formattedDate = zonedDateTime.format(formatter)
-            mlsGridAPIURL.replaceAll("%modificationTimestampFromDB%", formattedDate)
+            url = mlsGridAPIURL.replaceAll("%modificationTimestampFromDB%", formattedDate)
         } else {
-            mlsGridAPIURL.replaceAll("%modificationTimestampFromDB%", "2025-01-01T20:14:08Z")
+            url = "https://api.mlsgrid.com/v2/Property?" +
+                    "%24filter=StandardStatus%20eq%20%27Active%27%20or%20StandardStatus%20eq%20%27ComingSoon%27%20" +
+                    "&%24top=${FETCH_TOP}" +
+                    "&%24expand=Media"
         }
+        return url
     }
 
     private String getConfigKey(){
