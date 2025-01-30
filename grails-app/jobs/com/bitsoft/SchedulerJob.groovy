@@ -1,5 +1,6 @@
 package com.bitsoft
 
+import com.bitsoft.mls.Config
 import com.bitsoft.mls.MlsService
 
 class SchedulerJob {
@@ -13,8 +14,12 @@ class SchedulerJob {
     }
 
     def execute() {
-        println("**********Faced Started @ ${new Date()}**********")
-        mlsService.fetchMLSData(null)
-        println("**********Faced Completed @ ${new Date()}**********")
+        if (Config.last().isCorn) {
+            println("**********Faced Started @ ${new Date()}**********")
+            mlsService.fetchMLSData(null)
+            println("**********Faced Completed @ ${new Date()}**********")
+        } else {
+            println("**********isCorn off **********")
+        }
     }
 }

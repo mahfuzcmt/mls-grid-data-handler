@@ -9,6 +9,8 @@ class Config {
     String url
     String apiKey
 
+    Boolean isCorn = true
+
     Date lastImport
     Date created
     Date updated
@@ -17,6 +19,7 @@ class Config {
 
     static constraints = {
         url nullable: true
+        isCorn nullable: true
         apiKey nullable: true
         lastTimeStamp nullable: true
     }
