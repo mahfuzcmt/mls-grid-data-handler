@@ -108,7 +108,7 @@ class MlsService {
                 deleteInvalidListings(toBeRemoved.ListingId)
             }
 
-
+            println("To be Saved/Updated: $listings.size()")
             processListings(listings)
             Config config = Config.last()
             if (!config) {
