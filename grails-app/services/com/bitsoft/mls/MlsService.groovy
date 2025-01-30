@@ -272,7 +272,6 @@ class MlsService {
     }
 
     @Transactional
-    @Transactional
     private void deleteInvalidListings(List<String> listingKeys) {
         try {
             List<Listing> listings = Listing.createCriteria().list(){
@@ -285,10 +284,10 @@ class MlsService {
                             File mediaFile = new File(media.mediaURL)
                             if (mediaFile.exists()) {
                                 mediaFile.delete()
-                                log.info "Deleted media file: ${mediaFile.absolutePath}"
+                                println("Deleted media file: ${mediaFile.absolutePath}")
                             }
                         } catch (Exception e) {
-                            log.error "Failed to delete media file for Listing ${listing.listingKey}: ${e.message}"
+                            println( "Failed to delete media file for Listing ${listing.listingKey}: ${e.message}")
                         }
                     }
                     media.delete()
