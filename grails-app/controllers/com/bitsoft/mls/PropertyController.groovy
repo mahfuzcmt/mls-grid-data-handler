@@ -3,7 +3,7 @@ package com.bitsoft.mls
 import grails.converters.JSON
 import grails.gorm.PagedResultList
 
-class MlsController {
+class PropertyController {
 
     MlsService mlsService
 
@@ -47,23 +47,23 @@ class MlsController {
                     total   : listings.totalCount,
                     max     : max,
                     offset  : offset,
-                    listings: listings.collect {
+                    listings: listings.collect { Listing listing ->
                         [
-                                id             : it.id,
-                                listingKey     : it.listingKey,
-                                media          : it.media,
-                                streetAddress  : it.streetAddress,
-                                unitNumber     : it.unitNumber,
-                                postalCity     : it.postalCity,
-                                stateOrProvince: it.stateOrProvince,
-                                postalCode     : it.postalCode,
-                                listPrice      : it.listPrice,
-                                bedroomsTotal  : it.bedroomsTotal,
-                                bathroomsTotal : it.bathroomsTotal,
-                                publicRemarks  : it.publicRemarks,
-                                latitude       : it.latitude,
-                                longitude      : it.longitude,
-                                url            : it.url
+                                id             : listing.id,
+                                listingKey     : listing.listingKey,
+                                media          : listing.media ? listing.media.collect{[url: it.mediaURL, alt: it.longDescription]} : [],
+                                streetAddress  : listing.streetAddress,
+                                unitNumber     : listing.unitNumber,
+                                postalCity     : listing.postalCity,
+                                stateOrProvince: listing.stateOrProvince,
+                                postalCode     : listing.postalCode,
+                                listPrice      : listing.listPrice,
+                                bedroomsTotal  : listing.bedroomsTotal,
+                                bathroomsTotal : listing.bathroomsTotal,
+                                publicRemarks  : listing.publicRemarks,
+                                latitude       : listing.latitude,
+                                longitude      : listing.longitude,
+                                url            : listing.url
                         ]
                     }
             ]
@@ -85,7 +85,7 @@ class MlsController {
             Map listingInfo = [
                     id             : listing.id,
                     listingKey     : listing.listingKey,
-                    media          : listing.media,
+                    media          : listing.media ? listing.media.collect{[url: it.mediaURL, alt: it.longDescription]} : [],
                     streetAddress  : listing.streetAddress,
                     unitNumber     : listing.unitNumber,
                     postalCity     : listing.postalCity,
