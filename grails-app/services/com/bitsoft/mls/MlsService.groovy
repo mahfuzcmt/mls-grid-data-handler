@@ -155,7 +155,7 @@ class MlsService {
         if (!mediaList) {
             return []
         }
-       String photoDir = "/opt/tomcat/images/"
+       String photoDir = "/opt/tomcat/webapps/images/"
        if (Environment.isDevelopmentMode()) {
            photoDir = "grails-app/assets/images/user-photos"
        }
@@ -185,7 +185,7 @@ class MlsService {
             try {
                 String mediaURL = it["MediaURL"]
                 if (mediaURL) {
-                    String fileName = mediaInfo.mediaObjectID ? "${mediaInfo.mediaObjectID}.jpg" : "default_${System.currentTimeMillis()}.jpg"
+                    String fileName = mediaInfo.mediaKey ? "${mediaInfo.mediaKey}.jpg" : "default_${System.currentTimeMillis()}.jpg"
                     File imageFile = new File(directory, fileName)
 
                     // Download and save the image
@@ -194,7 +194,7 @@ class MlsService {
                     }
 
                     // Update the media URL to point to the local file
-                    mediaInfo.mediaURL = imageFile.absolutePath
+                    mediaInfo.mediaURL = "images/${fileName}"
                 }
             } catch (Exception e) {
                 println "Failed to download image for MediaObjectID: ${mediaInfo.mediaObjectID}. Error: ${e.message}"
