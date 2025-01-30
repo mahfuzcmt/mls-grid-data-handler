@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter
 
 class MlsService {
 
-    int FETCH_TOP = 500
+    int FETCH_TOP = 100
 
     String mlsGridAPIURL = "https://api.mlsgrid.com/v2/Property?" +
             "%24filter=StandardStatus%20eq%20%27Active%27%20or%20StandardStatus%20eq%20%27ComingSoon%27%20and%20ModificationTimestamp%20gt%20%modificationTimestampFromDB%" +
@@ -65,6 +65,7 @@ class MlsService {
             if(!url){
                 url = getURL()
             }
+            println("url: ${url}")
             def connection = new URL(url).openConnection()
             connection.setRequestProperty("Authorization", "Bearer ${getConfigKey()}")
             connection.setRequestProperty("Content-Type", "application/json")
