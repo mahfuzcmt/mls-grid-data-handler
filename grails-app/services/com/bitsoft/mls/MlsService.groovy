@@ -10,11 +10,11 @@ import java.time.format.DateTimeFormatter
 
 class MlsService {
 
-    int FETCH_TOP = 100
+    int FETCH_TOP = 500
 
     String mlsGridAPIURL = "https://api.mlsgrid.com/v2/Property?" +
             "%24filter=StandardStatus%20eq%20%27Active%27%20or%20StandardStatus%20eq%20%27ComingSoon%27%20and%20ModificationTimestamp%20gt%20%modificationTimestampFromDB%" +
-            "&%24top=${FETCH_TOP}" +
+            "&%24top=${FETCH_TOP}&%24skip=%SKIP_VALUE%" +
             "&%24expand=Media"
 
 
@@ -30,6 +30,7 @@ class MlsService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
             String formattedDate = zonedDateTime.format(formatter)
             url = mlsGridAPIURL.replaceAll("%modificationTimestampFromDB%", formattedDate)
+            url = url.replaceAll("%SKIP_VALUE%", config.skip)
         } else {
             url = "https://api.mlsgrid.com/v2/Property?" +
                     "%24filter=StandardStatus%20eq%20%27Active%27%20or%20StandardStatus%20eq%20%27ComingSoon%27%20" +

@@ -5,6 +5,7 @@ class Config {
     Long id
 
     Long lastTimeStamp
+    Integer skip = 0
 
     String url
     String apiKey
@@ -19,6 +20,7 @@ class Config {
 
     static constraints = {
         url nullable: true
+        skip nullable: true
         isCorn nullable: true
         apiKey nullable: true
         lastTimeStamp nullable: true
