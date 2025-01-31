@@ -44,6 +44,7 @@ class PropertyController {
             }
 
             String requestURL = request.requestURL.toString()
+            String baseURL = requestURL.replaceAll("(https?://[^/]+).*", "\$1")
 
             def response = [
                     total   : listings.totalCount,
@@ -53,7 +54,7 @@ class PropertyController {
                         [
                                 id             : listing.id,
                                 listingKey     : listing.listingKey,
-                                media          : listing.media ? listing.media.collect{[fullUrl: requestURL+"/"+it.mediaURL, url: it.mediaURL, alt: it.longDescription]} : [],
+                                media          : listing.media ? listing.media.collect{[fullUrl: baseURL+"/"+it.mediaURL, url: it.mediaURL, alt: it.longDescription]} : [],
                                 streetAddress  : listing.streetAddress,
                                 unitNumber     : listing.unitNumber,
                                 postalCity     : listing.postalCity,
@@ -84,10 +85,11 @@ class PropertyController {
                 return
             }
             String requestURL = request.requestURL.toString()
+            String baseURL = requestURL.replaceAll("(https?://[^/]+).*", "\$1")
             Map listingInfo = [
                     id             : listing.id,
                     listingKey     : listing.listingKey,
-                    media          : listing.media ? listing.media.collect{[fullUrl: requestURL+"/"+it.mediaURL, url: it.mediaURL, alt: it.longDescription]} : [],
+                    media          : listing.media ? listing.media.collect{[fullUrl: baseURL+"/"+it.mediaURL, url: it.mediaURL, alt: it.longDescription]} : [],
                     streetAddress  : listing.streetAddress,
                     unitNumber     : listing.unitNumber,
                     postalCity     : listing.postalCity,
