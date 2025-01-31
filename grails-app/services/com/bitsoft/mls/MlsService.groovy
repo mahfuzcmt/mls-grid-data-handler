@@ -30,7 +30,9 @@ class MlsService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
             String formattedDate = zonedDateTime.format(formatter)
             url = mlsGridAPIURL.replaceAll("%modificationTimestampFromDB%", formattedDate)
-            url = url.replaceAll("%SKIP_VALUE%", config.skip)
+            if(config.skip){
+                url = url.replaceAll("%SKIP_VALUE%", "${config.skip}")
+            }
         } else {
             url = "https://api.mlsgrid.com/v2/Property?" +
                     "%24filter=StandardStatus%20eq%20%27Active%27%20or%20StandardStatus%20eq%20%27ComingSoon%27%20" +
