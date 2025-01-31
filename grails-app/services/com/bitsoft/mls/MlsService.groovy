@@ -3,7 +3,6 @@ package com.bitsoft.mls
 import grails.gorm.transactions.Transactional
 import grails.util.Environment
 import groovy.json.JsonSlurper
-import groovy.io.FileType
 
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -60,7 +59,7 @@ class MlsService {
     }
 
 
-    void fetchMLSData(String url, int retryCount = 0, Boolean isInitial = false) {
+    void fetchMLSData(String url, int retryCount = 0) {
         try {
             if(!url){
                 url = getURL()
@@ -104,32 +103,28 @@ class MlsService {
 
             if(jsonResponse.value && listings && jsonResponse.value.size() != listings.size()){
                 def toBeRemoved = jsonResponse.value - listings
-                println "toBeRemoved: $toBeRemoved.ListingId"
+                println "toBeRemoved: ${toBeRemoved.size()}"
                 deleteInvalidListings(toBeRemoved.ListingId)
             }
 
-            println("To be Saved/Updated: $listings.size()")
+            println("-------------To be Saved/Updated: ${listings.size()}-----------------------")
             processListings(listings)
-            Config config = Config.last()
-            if (!config) {
-                config = new Config()
-                config.created = new Date()
-            }
-            config.lastTimeStamp = System.currentTimeMillis()
-            config.lastImport = new Date()
-            config.updated = new Date()
-           /* try {
-                config.lastImport = Date.from(ZonedDateTime.parse(listings.last()["ModificationTimestamp"]).toInstant())
-            } catch (Exception e) {
-                config.lastImport = new Date()
-            }*/
-            config.save()
+
 
             // Handle next link
             if (jsonResponse['@odata.nextLink']) {
                 fetchMLSData(jsonResponse['@odata.nextLink'])
             } else {
-                log.info "Data import completed successfully"
+                println "Data import completed successfully"
+                Config config = Config.last()
+                if (!config) {
+                    config = new Config()
+                    config.created = new Date()
+                }
+                config.lastTimeStamp = System.currentTimeMillis()
+                config.lastImport = new Date()
+                config.updated = new Date()
+                config.save()
             }
 
         } catch (Exception e) {
@@ -139,7 +134,7 @@ class MlsService {
                 sleep(waitTime)
                 fetchMLSData(url, retryCount + 1)
             } else {
-                log.error "Failed after 3 retries: ${e.message}"
+                println "Failed after 3 retries: ${e.message}"
                 throw e
             }
         }
@@ -151,7 +146,7 @@ class MlsService {
                 // Save or update in the database
                 saveOrUpdateListing(listing)
             } catch (Exception e) {
-                log.error "Error processing listing ${listing.ListingKey}: ${e.message}"
+                println "Error processing listing ${listing.ListingKey}: ${e.message}"
             }
         }
     }
@@ -260,18 +255,18 @@ class MlsService {
             existingListing.updated = new Date()
             if (existingListing.save()) {
                 //TODO update images
-                log.info "Listing ${listingData.ListingKey} updated successfully"
+                println "Listing ${listingData.ListingKey} updated successfully"
             } else {
-                log.error "Failed to update listing ${listingData.ListingKey}: ${existingListing.errors.allErrors}"
+                println "Failed to update listing ${listingData.ListingKey}: ${existingListing.errors.allErrors}"
             }
         } else {
             Listing newListing = new Listing(mappedData)
             newListing.created = new Date()
             newListing.updated = new Date()
             if (newListing.save()) {
-                log.info "Listing ${listingData.ListingKey} created successfully"
+                println "Listing ${listingData.ListingKey} created successfully"
             } else {
-                log.error "Failed to create listing ${listingData.ListingKey}: ${newListing.errors.allErrors}"
+                println "Failed to create listing ${listingData.ListingKey}: ${newListing.errors.allErrors}"
             }
         }
     }
@@ -299,9 +294,9 @@ class MlsService {
                 }
                 listing.delete()
             }
-            log.info "Deleted invalid listings: ${listingKeys}"
+            println "Deleted invalid listings: ${listingKeys}"
         } catch (Exception e) {
-            log.error("Error deleting invalid listings: ${e.message}")
+            println("Error deleting invalid listings: ${e.message}")
         }
     }
 

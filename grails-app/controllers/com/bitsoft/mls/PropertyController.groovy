@@ -43,6 +43,8 @@ class PropertyController {
                 }
             }
 
+            String requestURL = request.requestURL.toString()
+
             def response = [
                     total   : listings.totalCount,
                     max     : max,
@@ -51,7 +53,7 @@ class PropertyController {
                         [
                                 id             : listing.id,
                                 listingKey     : listing.listingKey,
-                                media          : listing.media ? listing.media.collect{[url: it.mediaURL, alt: it.longDescription]} : [],
+                                media          : listing.media ? listing.media.collect{[fullUrl: requestURL+"/"+it.mediaURL, url: it.mediaURL, alt: it.longDescription]} : [],
                                 streetAddress  : listing.streetAddress,
                                 unitNumber     : listing.unitNumber,
                                 postalCity     : listing.postalCity,
@@ -81,11 +83,11 @@ class PropertyController {
                 render([status: "error", message: "Listing not found"] as JSON)
                 return
             }
-
+            String requestURL = request.requestURL.toString()
             Map listingInfo = [
                     id             : listing.id,
                     listingKey     : listing.listingKey,
-                    media          : listing.media ? listing.media.collect{[url: it.mediaURL, alt: it.longDescription]} : [],
+                    media          : listing.media ? listing.media.collect{[fullUrl: requestURL+"/"+it.mediaURL, url: it.mediaURL, alt: it.longDescription]} : [],
                     streetAddress  : listing.streetAddress,
                     unitNumber     : listing.unitNumber,
                     postalCity     : listing.postalCity,

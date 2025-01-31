@@ -33,6 +33,7 @@ class Media {
 
     static mapping = {
         mediaURL type: 'text'
+        originalUrl type: 'text'
         longDescription type: 'text'
     }
 
