@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter
 
 class MlsService {
 
-    int FETCH_TOP = 500
+    int FETCH_TOP = 5
 
     String mlsGridAPIURL = "https://api.mlsgrid.com/v2/Property?" +
             "%24filter=StandardStatus%20eq%20%27Active%27%20or%20StandardStatus%20eq%20%27ComingSoon%27%20and%20ModificationTimestamp%20gt%20%modificationTimestampFromDB%" +
@@ -30,8 +30,10 @@ class MlsService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
             String formattedDate = zonedDateTime.format(formatter)
             url = mlsGridAPIURL.replaceAll("%modificationTimestampFromDB%", formattedDate)
-            if(config.skip){
+            if (config.skip) {
                 url = url.replaceAll("%SKIP_VALUE%", "${config.skip}")
+            } else {
+                url = url.replaceAll("%SKIP_VALUE%", "0")
             }
         } else {
             url = "https://api.mlsgrid.com/v2/Property?" +
@@ -42,7 +44,7 @@ class MlsService {
         return url
     }
 
-    private String getConfigKey(){
+    private String getApiKey(){
         Config config = Config.last()
         if (config) {
             return config.getApiKey()
@@ -51,25 +53,58 @@ class MlsService {
         }
     }
 
-
-    private void downloadImages(){
-
+    void updateCornRunningStatus(Boolean status = false){
+        Config config = Config.last()
+        if(config){
+            config.isRunning =  status
+            config.save()
+        }
     }
 
-
-    private void removeImages(){
-
+    void extractAndUpdateSkipValue(String url) {
+        if (!url) {
+            println "URL not found"
+            return
+        }
+        try {
+            def query = url.split("\\?")[1] // Get query part of URL
+            def params = query.split("&") // Split parameters
+            def skipParam = params.find { it.startsWith("%24skip=") } // Find $skip param
+            if(!skipParam){
+                skipParam = params.find { it.startsWith("\$skip=") }
+            }
+            if (skipParam) {
+                Integer skip = URLDecoder.decode(skipParam.split("=")[1], "UTF-8").toInteger()
+                updateSkipValue(skip)
+            } else {
+                println "Skip value not found in the URL"
+            }
+        } catch (Exception e) {
+            println "Skip value is invalid. ${e.message}"
+        }
     }
 
+    void updateSkipValue(Integer skip) {
+        Config config = Config.last()
+        if (config && skip) {
+            config.skip = skip
+            config.save()
+            println "Updated skip value to: ${skip}"
+        } else {
+            println "Failed to update skip value"
+        }
+    }
 
     void fetchMLSData(String url, int retryCount = 0) {
         try {
+            updateCornRunningStatus(true)
             if(!url){
                 url = getURL()
             }
+            extractAndUpdateSkipValue(url)
             println("url: ${url}")
             def connection = new URL(url).openConnection()
-            connection.setRequestProperty("Authorization", "Bearer ${getConfigKey()}")
+            connection.setRequestProperty("Authorization", "Bearer ${getApiKey()}")
             connection.setRequestProperty("Content-Type", "application/json")
             connection.setRequestProperty("Accept", "application/json")
             connection.setRequestProperty("Accept-Encoding", "gzip") // Add gzip compression
@@ -126,6 +161,7 @@ class MlsService {
                 }
                 config.lastTimeStamp = System.currentTimeMillis()
                 config.lastImport = new Date()
+                config.isRunning = false
                 config.updated = new Date()
                 config.save()
             }
@@ -138,6 +174,7 @@ class MlsService {
                 fetchMLSData(url, retryCount + 1)
             } else {
                 println "Failed after 3 retries: ${e.message}"
+                updateCornRunningStatus(false)
                 throw e
             }
         }
@@ -155,7 +192,7 @@ class MlsService {
     }
 
    List formatMediaData(List mediaList) {
-        if (!mediaList) {
+        if (!mediaList || Environment.isDevelopmentMode()) {
             return []
         }
        String photoDir = "/opt/tomcat/webapps/images/"

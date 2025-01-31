@@ -11,6 +11,7 @@ class Config {
     String apiKey
 
     Boolean isCorn = true
+    Boolean isRunning = false
 
     Date lastImport
     Date created
@@ -23,6 +24,7 @@ class Config {
         skip nullable: true
         isCorn nullable: true
         apiKey nullable: true
+        isRunning nullable: true
         lastTimeStamp nullable: true
     }
 

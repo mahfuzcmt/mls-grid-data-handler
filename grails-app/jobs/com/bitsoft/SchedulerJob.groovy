@@ -14,12 +14,21 @@ class SchedulerJob {
     }
 
     def execute() {
-        if (Config.last().isCorn) {
-            println("**********Faced Started @ ${new Date()}**********")
-            mlsService.fetchMLSData(null)
-            println("**********Faced Completed @ ${new Date()}**********")
-        } else {
-            println("**********isCorn off **********")
+        Config config = Config.last()
+        if (!config) {
+            println("********** Corn Config is not available **********")
+            return
         }
+        if (config && !config.isCorn) {
+            println("********** Corn is Offed **********")
+            return
+        }
+        if (config && config.isRunning) {
+            println("********** Corn is Running **********")
+            return
+        }
+        println("**********Faced Started @ ${new Date()}**********")
+        mlsService.fetchMLSData(null)
+        println("**********Faced Completed @ ${new Date()}**********")
     }
 }

@@ -110,6 +110,10 @@ class PropertyController {
         }
     }
 
+    def count() {
+        render([status: "success", total: Listing.count()] as JSON)
+    }
+
     def create() {
         try {
             def createdListing = mlsService.fetchMLSData(null) // Adjust as needed for actual implementation
