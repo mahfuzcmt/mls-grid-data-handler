@@ -64,6 +64,24 @@ class MlsService {
         }
     }
 
+    @Transactional
+    void updateConfigAfterCornRun(Config config){
+        Listing lastListing = Listing.last() ?: null
+        String lastImport = lastListing ? lastListing.modificationTimestamp : ""
+        println("lastImport: ${lastImport}")
+        if(lastImport){
+            config.lastImport = lastImport
+        }
+        config.isRunning = false
+        config.updated = new Date()
+        config.merge()
+        if(config.errors){
+            println("errors: ${config.errors}")
+            return
+        }
+        println("config Updated")
+    }
+
     void extractAndUpdateSkipValue(String url) {
         if (!url) {
             println "URL not found"

@@ -31,17 +31,6 @@ class SchedulerJob {
         println("**********Faced Started @ ${new Date()}**********")
         mlsService.fetchMLSData(null)
         println("**********Faced Completed @ ${new Date()}**********")
-        Listing lastListing = Listing.last() ?: null
-        String lastImport = lastListing ? lastListing.modificationTimestamp : ""
-        println("lastImport: ${lastImport}")
-        if(lastImport){
-            config.lastImport = lastImport
-        }
-        config.isRunning = false
-        config.updated = new Date()
-        config.merge()
-        if(!config.errors){
-            println("errors: ${config.errors}")
-        }
+        mlsService.updateConfigAfterCornRun(config)
     }
 }
