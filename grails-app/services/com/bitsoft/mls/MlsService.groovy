@@ -10,11 +10,12 @@ import java.time.format.DateTimeFormatter
 
 class MlsService {
 
-    int FETCH_TOP = 5
+    int FETCH_TOP = 100
 
     String mlsGridAPIURL = "https://api.mlsgrid.com/v2/Property?" +
             "%24filter=StandardStatus%20eq%20%27Active%27%20or%20StandardStatus%20eq%20%27ComingSoon%27%20and%20ModificationTimestamp%20gt%20%modificationTimestampFromDB%" +
-            "&%24top=${FETCH_TOP}&%24skip=%SKIP_VALUE%" +
+            //"&%24top=${FETCH_TOP}&%24skip=%SKIP_VALUE%" +
+            "&%24top=${FETCH_TOP}" +
             "&%24expand=Media"
 
 
@@ -23,18 +24,20 @@ class MlsService {
     List<String> invalidListings = []
 
     private String getURL() {
-        Config config = Config.last()
+        Listing lastListing = Listing.last()
         String url
+        if(lastListing && lastListing.modificationTimestamp){
+            url = mlsGridAPIURL.replaceAll("%modificationTimestampFromDB%", lastListing.modificationTimestamp)
+            return url
+        }
+        Config config = Config.last()
         if (config) {
-            ZonedDateTime zonedDateTime = config.lastImport.toInstant().atZone(java.time.ZoneId.of("UTC"))
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
-            String formattedDate = zonedDateTime.format(formatter)
-            url = mlsGridAPIURL.replaceAll("%modificationTimestampFromDB%", formattedDate)
-            if (config.skip) {
+            url = mlsGridAPIURL.replaceAll("%modificationTimestampFromDB%", config.lastImport)
+          /*  if (config.skip) {
                 url = url.replaceAll("%SKIP_VALUE%", "${config.skip}")
             } else {
                 url = url.replaceAll("%SKIP_VALUE%", "0")
-            }
+            }*/
         } else {
             url = "https://api.mlsgrid.com/v2/Property?" +
                     "%24filter=StandardStatus%20eq%20%27Active%27%20or%20StandardStatus%20eq%20%27ComingSoon%27%20" +
@@ -101,7 +104,7 @@ class MlsService {
             if(!url){
                 url = getURL()
             }
-            extractAndUpdateSkipValue(url)
+            //extractAndUpdateSkipValue(url)
             println("url: ${url}")
             def connection = new URL(url).openConnection()
             connection.setRequestProperty("Authorization", "Bearer ${getApiKey()}")
@@ -154,16 +157,6 @@ class MlsService {
                 fetchMLSData(jsonResponse['@odata.nextLink'])
             } else {
                 println "Data import completed successfully"
-                Config config = Config.last()
-                if (!config) {
-                    config = new Config()
-                    config.created = new Date()
-                }
-                config.lastTimeStamp = System.currentTimeMillis()
-                config.lastImport = new Date()
-                config.isRunning = false
-                config.updated = new Date()
-                config.save()
             }
 
         } catch (Exception e) {
@@ -279,6 +272,7 @@ class MlsService {
                 daysOnMarketCumulative  : listingData.CumulativeDaysOnMarket ?: 9999, // Default value if null
                 listDate                : listingData.ListDate,
                 originalEntryTimestamp  : listingData.OriginalEntryTimestamp,
+                modificationTimestamp   : listingData.ModificationTimestamp,
                 inputDate               : listingData.NST_LastUpdateDate,
                 listingContractDate     : listingData.ListingContractDate,
                 sqFtFinishedBuilding    : listingData.SqFtFinishedBuilding as Integer,

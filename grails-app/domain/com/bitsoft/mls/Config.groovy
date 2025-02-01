@@ -4,16 +4,15 @@ class Config {
 
     Long id
 
-    Long lastTimeStamp
     Integer skip = 0
 
     String url
     String apiKey
+    String lastImport
 
     Boolean isCorn = true
     Boolean isRunning = false
 
-    Date lastImport
     Date created
     Date updated
 
@@ -24,13 +23,12 @@ class Config {
         skip nullable: true
         isCorn nullable: true
         apiKey nullable: true
+        lastImport nullable: true
         isRunning nullable: true
-        lastTimeStamp nullable: true
     }
 
     def beforeInsert (){
         this.created = new Date()
-        this.lastImport = new Date()
     }
 
 

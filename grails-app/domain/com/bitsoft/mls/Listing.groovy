@@ -16,6 +16,7 @@ class Listing {
     String postalCode
     String publicRemarks
     String listOfficeName
+    String modificationTimestamp
 
     Integer bedroomsTotal
     Integer bathroomsTotal
@@ -65,6 +66,7 @@ class Listing {
         listOfficeName nullable: true
         bedroomsTotal nullable: true
         bathroomsTotal nullable: true
+        modificationTimestamp nullable: true
         sqFtTotal nullable: true
         nstSqFtTotal nullable: true // Constraint for NST_SqFtTotal
         garageSpaces nullable: true
