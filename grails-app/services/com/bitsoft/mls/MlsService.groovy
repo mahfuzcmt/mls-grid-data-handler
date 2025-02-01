@@ -75,11 +75,11 @@ class MlsService {
         config.isRunning = false
         config.updated = new Date()
         config.merge()
-        if(config.errors){
-            println("errors: ${config.errors}")
+        if(!config.errors){
+            println("config Updated")
             return
         }
-        println("config Updated")
+        println("errors: ${config.errors}")
     }
 
     void extractAndUpdateSkipValue(String url) {
