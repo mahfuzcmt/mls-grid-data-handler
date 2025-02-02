@@ -20,7 +20,19 @@ class PropertyController {
             Double longitudeGte = params.double('Longitude_gte')
             Double longitudeLte = params.double('Longitude_lte')
 
+            println("params : ${params}")
+
             PagedResultList listings = Listing.createCriteria().list(max: max, offset: offset) {
+                if(params.searchText) {
+                    ilike("streetAddress", "%${params.searchText.trim().encodeAsLikeText()}%")
+                    ilike("streetNumber", "%${params.searchText.trim().encodeAsLikeText()}%")
+                    ilike("streetDirPrefix", "%${params.searchText.trim().encodeAsLikeText()}%")
+                    ilike("streetSuffix", "%${params.searchText.trim().encodeAsLikeText()}%")
+                    ilike("postalCity", "%${params.searchText.trim().encodeAsLikeText()}%")
+                    ilike("postalCode", "%${params.searchText.trim().encodeAsLikeText()}%")
+                    ilike("streetName", "%${params.searchText.trim().encodeAsLikeText()}%")
+                    ilike("stateOrProvince", "%${params.searchText.trim().encodeAsLikeText()}%")
+                }
                 if (latitudeGte != null) {
                     ge('latitude', latitudeGte)
                 }
@@ -52,21 +64,26 @@ class PropertyController {
                     offset  : offset,
                     listings: listings.collect { Listing listing ->
                         [
-                                id             : listing.id,
-                                listingKey     : listing.listingKey,
-                                media          : listing.media ? listing.media.collect{[fullUrl: baseURL+"/"+it.mediaURL, url: it.mediaURL, alt: it.longDescription]} : [],
-                                streetAddress  : listing.streetAddress,
-                                unitNumber     : listing.unitNumber,
-                                postalCity     : listing.postalCity,
-                                stateOrProvince: listing.stateOrProvince,
-                                postalCode     : listing.postalCode,
-                                listPrice      : listing.listPrice,
-                                bedroomsTotal  : listing.bedroomsTotal,
-                                bathroomsTotal : listing.bathroomsTotal,
-                                publicRemarks  : listing.publicRemarks,
-                                latitude       : listing.latitude,
-                                longitude      : listing.longitude,
-                                url            : listing.url
+                                id               : listing.id,
+                                listingKey       : listing.listingKey,
+                                media            : listing.media ? listing.media.collect { [fullUrl: baseURL + "/" + it.mediaURL, url: it.mediaURL, alt: it.longDescription] } : [],
+                                streetAddress    : listing.streetAddress,
+                                unitNumber       : listing.unitNumber,
+                                postalCity       : listing.postalCity,
+                                stateOrProvince  : listing.stateOrProvince,
+                                postalCode       : listing.postalCode,
+                                listPrice        : listing.listPrice,
+                                bedroomsTotal    : listing.bedroomsTotal,
+                                bathroomsTotal   : listing.bathroomsTotal,
+                                publicRemarks    : listing.publicRemarks,
+                                latitude         : listing.latitude,
+                                longitude        : listing.longitude,
+                                lotSizeArea      : listing.lotSizeArea,
+                                nstSqFtTotal     : listing.nstSqFtTotal,
+                                garageSpaces     : listing.garageSpaces,
+                                nstWaterfrontFeet: listing.waterfrontFeet,
+                                lotSizeUnits     : 'acres',
+                                url              : listing.url
                         ]
                     }
             ]
@@ -87,21 +104,26 @@ class PropertyController {
             String requestURL = request.requestURL.toString()
             String baseURL = requestURL.replaceAll("(https?://[^/]+).*", "\$1")
             Map listingInfo = [
-                    id             : listing.id,
-                    listingKey     : listing.listingKey,
-                    media          : listing.media ? listing.media.collect{[fullUrl: baseURL+"/"+it.mediaURL, url: it.mediaURL, alt: it.longDescription]} : [],
-                    streetAddress  : listing.streetAddress,
-                    unitNumber     : listing.unitNumber,
-                    postalCity     : listing.postalCity,
-                    stateOrProvince: listing.stateOrProvince,
-                    postalCode     : listing.postalCode,
-                    listPrice      : listing.listPrice,
-                    bedroomsTotal  : listing.bedroomsTotal,
-                    bathroomsTotal : listing.bathroomsTotal,
-                    publicRemarks  : listing.publicRemarks,
-                    latitude       : listing.latitude,
-                    longitude      : listing.longitude,
-                    url            : listing.url
+                    id               : listing.id,
+                    listingKey       : listing.listingKey,
+                    media            : listing.media ? listing.media.collect { [fullUrl: baseURL + "/" + it.mediaURL, url: it.mediaURL, alt: it.longDescription] } : [],
+                    streetAddress    : listing.streetAddress,
+                    unitNumber       : listing.unitNumber,
+                    postalCity       : listing.postalCity,
+                    stateOrProvince  : listing.stateOrProvince,
+                    postalCode       : listing.postalCode,
+                    listPrice        : listing.listPrice,
+                    bedroomsTotal    : listing.bedroomsTotal,
+                    bathroomsTotal   : listing.bathroomsTotal,
+                    publicRemarks    : listing.publicRemarks,
+                    latitude         : listing.latitude,
+                    longitude        : listing.longitude,
+                    lotSizeArea      : listing.lotSizeArea,
+                    nstSqFtTotal     : listing.nstSqFtTotal,
+                    garageSpaces     : listing.garageSpaces,
+                    nstWaterfrontFeet: listing.waterfrontFeet,
+                    lotSizeUnits     : 'acres',
+                    url              : listing.url
             ]
 
             render([status: "success", listing: listingInfo] as JSON)
