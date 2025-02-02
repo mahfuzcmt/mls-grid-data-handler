@@ -111,3 +111,6 @@ hibernate:
 logging:
     level:
         org.springframework.web.multipart: DEBUG
+grails:
+    cors:
+        enabled: true

@@ -12,8 +12,8 @@ class PropertyController {
             int max = params.int('max') ?: 20
             int offset = params.int('offset') ?: 0
 
-            String sort = params.sort ?: "desc"
-            String orderedBy = params.order ?: "id"
+            String direction = params.order ?: "desc"
+            String orderedBy = params.sort ?: "id"
 
             Double latitudeGte = params.double('Latitude_gte')
             Double latitudeLte = params.double('Latitude_lte')
@@ -33,6 +33,9 @@ class PropertyController {
                     ilike("streetName", "%${params.searchText.trim().encodeAsLikeText()}%")
                     ilike("stateOrProvince", "%${params.searchText.trim().encodeAsLikeText()}%")
                 }
+                if(params.city) {
+                    ilike("postalCity", "%${params.city.trim().encodeAsLikeText()}%")
+                }
                 if (latitudeGte != null) {
                     ge('latitude', latitudeGte)
                 }
@@ -46,13 +49,7 @@ class PropertyController {
                 if (longitudeLte != null) {
                     le('longitude', longitudeLte)
                 }
-
-                def validSortFields = ['id', 'latitude', 'longitude', 'listPrice', 'bedroomsTotal']
-                if (sort && validSortFields.contains(sort)) {
-                    order(sort, orderedBy in ['asc', 'desc'] ? orderedBy : 'desc')
-                } else {
-                    order("id", sort)
-                }
+                order(orderedBy, direction)
             }
 
             String requestURL = request.requestURL.toString()
