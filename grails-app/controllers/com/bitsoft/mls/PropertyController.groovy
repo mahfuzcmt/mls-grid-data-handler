@@ -23,18 +23,22 @@ class PropertyController {
             println("params : ${params}")
 
             PagedResultList listings = Listing.createCriteria().list(max: max, offset: offset) {
-                if(params.searchText) {
-                    ilike("streetAddress", "%${params.searchText.trim().encodeAsLikeText()}%")
-                    ilike("streetNumber", "%${params.searchText.trim().encodeAsLikeText()}%")
-                    ilike("streetDirPrefix", "%${params.searchText.trim().encodeAsLikeText()}%")
-                    ilike("streetSuffix", "%${params.searchText.trim().encodeAsLikeText()}%")
-                    ilike("postalCity", "%${params.searchText.trim().encodeAsLikeText()}%")
-                    ilike("postalCode", "%${params.searchText.trim().encodeAsLikeText()}%")
-                    ilike("streetName", "%${params.searchText.trim().encodeAsLikeText()}%")
-                    ilike("stateOrProvince", "%${params.searchText.trim().encodeAsLikeText()}%")
+                if (params.searchText) {
+                    def searchText = "%${params.searchText.trim()}%"
+                    or {
+                        ilike("streetAddress", searchText)
+                        ilike("streetNumber", searchText)
+                        ilike("streetDirPrefix", searchText)
+                        ilike("streetSuffix", searchText)
+                        ilike("postalCity", searchText)
+                        ilike("postalCode", searchText)
+                        ilike("streetName", searchText)
+                        ilike("stateOrProvince", searchText)
+                    }
                 }
+
                 if(params.city) {
-                    ilike("postalCity", "%${params.city.trim().encodeAsLikeText()}%")
+                    ilike("postalCity", "%${params.city.trim()}%")
                 }
                 if (latitudeGte != null) {
                     ge('latitude', latitudeGte)
