@@ -65,7 +65,7 @@ class MlsService {
     }
 
     @Transactional
-    void updateConfigAfterCornRun(Config config){
+    def updateConfigAfterCornRun(Config config){
         Listing lastListing = Listing.last() ?: null
         String lastImport = lastListing ? lastListing.modificationTimestamp : ""
         println("lastImport: ${lastImport}")
