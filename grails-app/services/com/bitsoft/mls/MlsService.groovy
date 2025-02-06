@@ -272,6 +272,7 @@ class MlsService {
                 postalCity              : listingData.PostalCity,
                 stateOrProvince         : listingData.StateOrProvince,
                 postalCode              : listingData.PostalCode,
+                standardStatus          : listingData.StandardStatus,
                 publicRemarks           : listingData.PublicRemarks,
                 listOfficeName          : listingData.ListOfficeName,
                 bedroomsTotal           : listingData.BedroomsTotal as Integer,
@@ -279,7 +280,7 @@ class MlsService {
                 sqFtTotal               : listingData.SqFtTotal as Integer,
                 nstSqFtTotal            : listingData.NST_SqFtTotal as Integer, // New field
                 garageSpaces            : listingData.GarageSpaces as Integer,
-                waterfrontFeet          : listingData.WaterfrontFeet as Integer,
+                waterfrontFeet          : listingData.NST_WaterfrontFeet as Integer,
                 url                     : listingData.Url,
                 latitude                : listingData.Latitude as Double,
                 longitude               : listingData.Longitude as Double,

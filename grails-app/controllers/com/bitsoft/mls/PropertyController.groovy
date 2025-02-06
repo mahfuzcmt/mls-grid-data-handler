@@ -85,6 +85,7 @@ class PropertyController {
                                 nstSqFtTotal     : listing.nstSqFtTotal,
                                 garageSpaces     : listing.garageSpaces,
                                 nstWaterfrontFeet: listing.waterfrontFeet,
+                                listOfficeName   : listing.listOfficeName,
                                 lotSizeUnits     : 'acres',
                                 url              : listing.url
                         ]
@@ -126,7 +127,8 @@ class PropertyController {
                     lotSizeArea      : listing.lotSizeArea,
                     nstSqFtTotal     : listing.nstSqFtTotal,
                     garageSpaces     : listing.garageSpaces,
-                    nstWaterfrontFeet: listing.waterfrontFeet,
+                    garageSpaces     : listing.garageSpaces,
+                    listOfficeName   : listing.listOfficeName,
                     lotSizeUnits     : 'acres',
                     url              : listing.url
             ]

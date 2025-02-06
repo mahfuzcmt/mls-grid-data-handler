@@ -5,6 +5,7 @@ class Listing {
     Long id
 
     String listingKey
+    String standardStatus
     String streetAddress
     String streetNumber
     String streetDirPrefix
@@ -53,6 +54,7 @@ class Listing {
 
     static constraints = {
         listingKey nullable: false
+        standardStatus nullable: true
         streetAddress nullable: true
         streetNumber nullable: true
         streetDirPrefix nullable: true
