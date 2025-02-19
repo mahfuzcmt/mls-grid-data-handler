@@ -13,7 +13,7 @@ class MlsService {
     int FETCH_TOP = 100
 
     String mlsGridAPIURL = "https://api.mlsgrid.com/v2/Property?" +
-            "%24filter=StandardStatus%20eq%20%27Active%27%20or%20StandardStatus%20eq%20%27ComingSoon%27%20and%20ModificationTimestamp%20gt%20%modificationTimestampFromDB%" +
+            "%24filter=StandardStatus%20in%20(%27Active%27%2C%27Coming%20Soon%27%2C%27Pending%27%2C%27Hold%27%2C%27Expired%27%2C%27Canceled%27)%20and%20ModificationTimestamp%20gt%20%modificationTimestampFromDB%" +
             //"&%24top=${FETCH_TOP}&%24skip=%SKIP_VALUE%" +
             "&%24top=${FETCH_TOP}" +
             "&%24expand=Media"
@@ -40,7 +40,7 @@ class MlsService {
             }*/
         } else {
             url = "https://api.mlsgrid.com/v2/Property?" +
-                    "%24filter=StandardStatus%20eq%20%27Active%27%20or%20StandardStatus%20eq%20%27ComingSoon%27%20" +
+                    "%24filter=StandardStatus%20in%20(%27Active%27%2C%27Coming%20Soon%27%2C%27Pending%27%2C%27Hold%27%2C%27Expired%27%2C%27Canceled%27)%20" +
                     "&%24top=${FETCH_TOP}" +
                     "&%24expand=Media"
         }
@@ -232,24 +232,23 @@ class MlsService {
             mediaInfo.created = new Date()
             mediaInfo.updated = new Date()
 
-            // Download and save the image
-            try {
-                String mediaURL = it["MediaURL"]
-                if (mediaURL) {
-                    String fileName = mediaInfo.mediaKey ? "${mediaInfo.mediaKey}.jpg" : "default_${System.currentTimeMillis()}.jpg"
-                    File imageFile = new File(directory, fileName)
+            String mediaURL = it["MediaURL"]
+            // Before downloading the image, check if it exists
+            String fileName = mediaInfo.mediaKey ? "${mediaInfo.mediaKey}.jpg" : "default_${System.currentTimeMillis()}.jpg"
+            File imageFile = new File(directory, fileName)
 
-                    // Download and save the image
+            if (!imageFile.exists()) {
+                try {
                     imageFile.withOutputStream { outputStream ->
                         outputStream << new URL(mediaURL).openStream()
                     }
-
-                    // Update the media URL to point to the local file
                     mediaInfo.mediaURL = "images/${fileName}"
+                } catch (Exception e) {
+                    println "Failed to download image for MediaObjectID: ${mediaInfo.mediaObjectID}. Error: ${e.message}"
+                    mediaInfo.mediaURL = null
                 }
-            } catch (Exception e) {
-                println "Failed to download image for MediaObjectID: ${mediaInfo.mediaObjectID}. Error: ${e.message}"
-                mediaInfo.mediaURL = null
+            } else {
+                mediaInfo.mediaURL = "images/${fileName}"
             }
 
             parsedMediaList.add(mediaInfo)
@@ -324,33 +323,42 @@ class MlsService {
         }
     }
 
-    @Transactional
-    private void deleteInvalidListings(List<String> listingKeys) {
+    void deleteInvalidListings(List<String> listingKeys) {
         try {
-            List<Listing> listings = Listing.createCriteria().list(){
+            List<Listing> listings = Listing.createCriteria().list {
                 inList("listingKey", listingKeys)
             }
+
+            println "Found: ${listings.size()} to delete"
+
             listings.each { Listing listing ->
+                String key = listing.listingKey
+                println "Found: ${listing.media.size()} media to delete"
                 listing.media.each { media ->
+                    Long mediaId = media.id
                     if (media.mediaURL) {
                         try {
-                            File mediaFile = new File(media.mediaURL)
+                            // Ensure the correct file path
+                            File mediaFile = new File("/opt/tomcat/webapps/" + media.mediaURL)
                             if (mediaFile.exists()) {
                                 mediaFile.delete()
                                 println("Deleted media file: ${mediaFile.absolutePath}")
                             }
                         } catch (Exception e) {
-                            println( "Failed to delete media file for Listing ${listing.listingKey}: ${e.message}")
+                            println("Failed to delete media file for Listing ${listing.listingKey}: ${e.message}")
                         }
                     }
                     media.delete()
+                    println "Deleted invalid media: ${mediaId}"
                 }
                 listing.delete()
+                println "Deleted invalid listings: ${key}"
             }
             println "Deleted invalid listings: ${listingKeys}"
         } catch (Exception e) {
             println("Error deleting invalid listings: ${e.message}")
         }
     }
+
 
 }
