@@ -276,8 +276,8 @@ class MlsService {
                 listOfficeName          : listingData.ListOfficeName,
                 bedroomsTotal           : listingData.BedroomsTotal as Integer,
                 bathroomsTotal          : listingData.BathroomsTotalInteger as Integer,
-                sqFtTotal               : listingData.SqFtTotal as Integer,
-                nstSqFtTotal            : listingData.NST_SqFtTotal as Integer, // New field
+                sqFtTotal               : listingData.LivingArea as Integer,
+                nstSqFtTotal            : listingData.BuildingAreaTotal as Integer,
                 garageSpaces            : listingData.GarageSpaces as Integer,
                 waterfrontFeet          : listingData.NST_WaterfrontFeet as Integer,
                 url                     : listingData.Url,
@@ -303,23 +303,23 @@ class MlsService {
         // Check if a listing with the same key exists
         Listing existingListing = Listing.findByListingKey(listingData.ListingKey)
         if (existingListing) {
-            existingListing.properties = mappedData
+            deleteInvalidListings([existingListing.listingKey])
+            /*existingListing.properties = mappedData
             existingListing.updated = new Date()
             if (existingListing.save()) {
                 //TODO update images
                 println "Listing ${listingData.ListingKey} updated successfully"
             } else {
                 println "Failed to update listing ${listingData.ListingKey}: ${existingListing.errors.allErrors}"
-            }
+            }*/
+        }
+        Listing newListing = new Listing(mappedData)
+        newListing.created = new Date()
+        newListing.updated = new Date()
+        if (newListing.save()) {
+            println "Listing ${listingData.ListingKey} created successfully"
         } else {
-            Listing newListing = new Listing(mappedData)
-            newListing.created = new Date()
-            newListing.updated = new Date()
-            if (newListing.save()) {
-                println "Listing ${listingData.ListingKey} created successfully"
-            } else {
-                println "Failed to create listing ${listingData.ListingKey}: ${newListing.errors.allErrors}"
-            }
+            println "Failed to create listing ${listingData.ListingKey}: ${newListing.errors.allErrors}"
         }
     }
 
@@ -354,7 +354,6 @@ class MlsService {
                 listing.delete()
                 println "Deleted invalid listings: ${key}"
             }
-            println "Deleted invalid listings: ${listingKeys}"
         } catch (Exception e) {
             println("Error deleting invalid listings: ${e.message}")
         }
